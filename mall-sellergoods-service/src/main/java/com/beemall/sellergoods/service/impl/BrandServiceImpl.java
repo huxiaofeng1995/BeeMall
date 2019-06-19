@@ -5,6 +5,7 @@ import com.beemall.entity.ResponseData;
 import com.beemall.entity.ResponseDataUtil;
 import com.beemall.mapper.TbBrandMapper;
 import com.beemall.pojo.TbBrand;
+import com.beemall.pojo.TbBrandExample;
 import com.beemall.sellergoods.service.BrandService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -49,6 +50,27 @@ public class BrandServiceImpl implements BrandService {
 			brandMapper.deleteByPrimaryKey(id);
 		}
 		return ResponseDataUtil.buildSuccess();
+	}
+
+	@Override
+	public ResponseData findPageByExample(TbBrand brand, int pageNum, int pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		TbBrandExample example = new TbBrandExample();
+		TbBrandExample.Criteria criteria =  example.createCriteria();
+		TbBrandExample.Criteria criteria2 =  example.createCriteria();
+		if(brand!=null){
+			if(brand.getName()!=null && brand.getName().length()>0){
+				criteria.andNameLike("%"+brand.getName()+"%");
+				example.or(criteria);
+			}
+			if(brand.getFirstChar()!=null && brand.getFirstChar().length()>0){//or条件查询
+				criteria2.andFirstCharEqualTo(brand.getFirstChar());
+				example.or(criteria2);
+			}
+		}
+
+		PageInfo<TbBrand> pageInfo = new PageInfo<>(brandMapper.selectByExample(example));
+		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
 
 }

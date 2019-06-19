@@ -32,4 +32,13 @@ public interface BrandService {
     public ResponseData update(TbBrand tbBrand);
 
     public ResponseData delete(Long[] ids);
+
+    /**
+     * 条件查询
+     * @param brand
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public ResponseData findPageByExample(TbBrand brand, int pageNum,int pageSize);
 }

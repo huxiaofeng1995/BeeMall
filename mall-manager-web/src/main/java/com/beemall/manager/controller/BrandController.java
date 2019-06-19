@@ -45,4 +45,10 @@ public class BrandController {
     public ResponseData delete(Long[] ids){
         return brandService.delete(ids);
     }
+
+    @PostMapping("/search")
+    public ResponseData search(@RequestBody TbBrand tbBrand, int page, int size){
+        return brandService.findPageByExample(tbBrand, page, size);
+    }
+
 }

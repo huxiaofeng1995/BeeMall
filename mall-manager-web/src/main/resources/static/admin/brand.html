@@ -27,11 +27,31 @@
               })
             }
 
+            //全选按钮
+            $scope.checkAll = function($event) {
+                var checks = document.getElementsByClassName("testCheck")
+                if($event.target.checked){
+
+                    for(var i = 0; i < checks.length; i++) {
+                        checks[i].checked = true;
+                    }
+                    for(var i = 0; i < $scope.brandList.length; i++){
+                        $scope.selectedIds.push($scope.brandList[i].id)//全选将当前页所有id加入被选中id数组中
+                    }
+                }else {
+                    for(var i = 0; i < checks.length; i++) {
+                        checks[i].checked = false;
+                    }
+                    $scope.selectedIds = [];
+                }
+                //console.log($scope.selectedIds);
+            }
+
             //重新加载列表 数据
             $scope.reloadList=function(){
                 $scope.selectedIds = [];
             	 //切换页码
-                $scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+                $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
             }
             //分页控件配置
             $scope.paginationConf = {
@@ -86,16 +106,36 @@
                     var index = $scope.selectedIds.indexOf(id);
                     $scope.selectedIds.splice(index, 1);
                 }
+
             }
             $scope.del = function() {
-                $http.get('../brand/delete?ids='+$scope.selectedIds).success(
-                    function(response){
-                        if(response.code == "0000"){
-                                $scope.reloadList();//刷新列表
+                if(confirm("确定要删除吗？")){
+                    $http.get('../brand/delete?ids='+$scope.selectedIds).success(
+                        function(response){
+                            if(response.code == "0000"){
+                                    $scope.reloadList();//刷新列表
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
+
+            //条件搜索
+            $scope.searchEntity = {};
+            $scope.search = function(page,rows){
+                console.log($scope.searchEntity)
+            	$http.post('../brand/search?page='+page+"&size="+rows, $scope.searchEntity).success(
+            		function(response){
+            			if(response.code == "0000"){
+                            $scope.brandList=response.data.list;
+                            $scope.paginationConf.totalItems=response.data.total;//更新总记录数
+                        }else {
+                            alert("请求失败");
+                        }
+            		}
+            	);
+            }
+
           })
 
     </script>
@@ -124,7 +164,7 @@
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							                                         
+                                    品牌：<input ng-model="searchEntity.name"> 首字母：<input ng-model="searchEntity.firstChar"><button type="button" class="btn btn-default" ng-click="reloadList()">查询</button>
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -134,7 +174,7 @@
 			                      <thead>
 			                          <tr>
 			                              <th class="" style="padding-right:0px">
-			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue">
+			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue" ng-click="checkAll($event)">
 			                              </th> 
 										  <th class="sorting_asc">品牌ID</th>
 									      <th class="sorting">品牌名称</th>									      
@@ -144,7 +184,7 @@
 			                      </thead>
 			                      <tbody ng-repeat="brand in brandList">
 			                          <tr>
-			                              <td><input  type="checkbox" ng-click="updateSelection($event,brand.id)"></td>
+			                              <td><input class="testCheck" type="checkbox" ng-click="updateSelection($event,brand.id)"></td>
 				                          <td>{{brand.id}}</td>
 									      <td>{{brand.name}}</td>
 		                                  <td>{{brand.firstChar}}</td>
