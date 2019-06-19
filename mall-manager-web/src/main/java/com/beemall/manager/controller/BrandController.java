@@ -4,10 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.entity.ResponseData;
 import com.beemall.pojo.TbBrand;
 import com.beemall.sellergoods.service.BrandService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class BrandController {
     @GetMapping("/findPage")
     public ResponseData findPage(int page, int size){
         return brandService.findPage(page, size);
+    }
+
+    @PostMapping("/add")
+    public ResponseData add(@RequestBody TbBrand tbBrand){
+        return brandService.add(tbBrand);
     }
 }

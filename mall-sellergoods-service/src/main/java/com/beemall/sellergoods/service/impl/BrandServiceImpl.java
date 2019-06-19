@@ -31,4 +31,10 @@ public class BrandServiceImpl implements BrandService {
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
 
+	@Override
+	public ResponseData add(TbBrand tbBrand) {
+		brandMapper.insert(tbBrand);
+		return ResponseDataUtil.buildSuccess();
+	}
+
 }

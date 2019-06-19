@@ -21,4 +21,11 @@ public interface BrandService {
      * @return
      */
     public ResponseData findPage(int pageNum, int pageSize);
+
+    /**
+     * 添加品牌
+     * @param tbBrand
+     * @return
+     */
+    public ResponseData add(TbBrand tbBrand);
 }
