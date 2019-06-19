@@ -28,4 +28,8 @@ public interface BrandService {
      * @return
      */
     public ResponseData add(TbBrand tbBrand);
+
+    public ResponseData update(TbBrand tbBrand);
+
+    public ResponseData delete(Long[] ids);
 }

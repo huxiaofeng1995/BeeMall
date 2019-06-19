@@ -35,4 +35,14 @@ public class BrandController {
     public ResponseData add(@RequestBody TbBrand tbBrand){
         return brandService.add(tbBrand);
     }
+
+    @PostMapping("/update")
+    public ResponseData update(@RequestBody TbBrand tbBrand){
+        return brandService.update(tbBrand);
+    }
+
+    @GetMapping("/delete")
+    public ResponseData delete(Long[] ids){
+        return brandService.delete(ids);
+    }
 }

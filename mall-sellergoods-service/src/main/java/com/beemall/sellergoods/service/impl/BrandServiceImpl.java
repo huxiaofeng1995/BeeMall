@@ -37,4 +37,18 @@ public class BrandServiceImpl implements BrandService {
 		return ResponseDataUtil.buildSuccess();
 	}
 
+	@Override
+	public ResponseData update(TbBrand tbBrand) {
+		brandMapper.updateByPrimaryKey(tbBrand);
+		return ResponseDataUtil.buildSuccess();
+	}
+
+	@Override
+	public ResponseData delete(Long[] ids) {
+		for(Long id : ids){
+			brandMapper.deleteByPrimaryKey(id);
+		}
+		return ResponseDataUtil.buildSuccess();
+	}
+
 }

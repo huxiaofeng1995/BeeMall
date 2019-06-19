@@ -29,6 +29,7 @@
 
             //重新加载列表 数据
             $scope.reloadList=function(){
+                $scope.selectedIds = [];
             	 //切换页码
                 $scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
             }
@@ -55,9 +56,13 @@
 			        });
 	        };
 
-            //新增
-            $scope.addBrand = function() {
-                $http.post('../brand/add',$scope.entity).success(
+            //新增    修改
+            $scope.saveBrand = function() {
+                var method = "add";
+                if($scope.entity.id != null){
+                    method = "update";
+                }
+                $http.post('../brand/'+ method,$scope.entity).success(
                     function(response) {
                         if(response.code == "0000"){
                             $scope.reloadList();
@@ -66,6 +71,30 @@
                         }
                     }
                 )
+            }
+
+            $scope.setEntity = function(val) {
+                console.log(val);
+                $scope.entity = val;
+            }
+            //删除
+            $scope.selectedIds = [];
+            $scope.updateSelection = function($event,id) {
+                if($event.target.checked){
+                    $scope.selectedIds.push(id)
+                }else {
+                    var index = $scope.selectedIds.indexOf(id);
+                    $scope.selectedIds.splice(index, 1);
+                }
+            }
+            $scope.del = function() {
+                $http.get('../brand/delete?ids='+$scope.selectedIds).success(
+                    function(response){
+                        if(response.code == "0000"){
+                                $scope.reloadList();//刷新列表
+                        }
+                    }
+                );
             }
           })
 
@@ -88,7 +117,7 @@
                                 <div class="form-group form-inline">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
-                                        <button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>           
+                                        <button type="button" class="btn btn-default" title="删除" ng-click="del()"><i class="fa fa-trash-o"></i> 删除</button>
                                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                                     </div>
                                 </div>
@@ -115,12 +144,12 @@
 			                      </thead>
 			                      <tbody ng-repeat="brand in brandList">
 			                          <tr>
-			                              <td><input  type="checkbox" ></td>			                              
+			                              <td><input  type="checkbox" ng-click="updateSelection($event,brand.id)"></td>
 				                          <td>{{brand.id}}</td>
 									      <td>{{brand.name}}</td>
 		                                  <td>{{brand.firstChar}}</td>
 		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"  >修改</button>                                           
+		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"  ng-click="setEntity(brand)">修改</button>
 		                                  </td>
 			                          </tr>
 			                      </tbody>
@@ -158,7 +187,7 @@
 			 </table>				
 		</div>
 		<div class="modal-footer">						
-			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="addBrand()">保存</button>
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="saveBrand()">保存</button>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>
