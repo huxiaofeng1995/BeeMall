@@ -51,4 +51,9 @@ public class BrandController {
         return brandService.findPageByExample(tbBrand, page, size);
     }
 
+    @GetMapping("/selectOptionList")
+    public ResponseData selectOptionList(){
+        return brandService.selectOptionList();
+    }
+
 }

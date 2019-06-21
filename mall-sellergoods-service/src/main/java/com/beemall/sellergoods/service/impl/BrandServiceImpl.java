@@ -73,4 +73,9 @@ public class BrandServiceImpl implements BrandService {
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
 
+	@Override
+	public ResponseData selectOptionList() {
+		return ResponseDataUtil.buildSuccess(brandMapper.selectOptionList());
+	}
+
 }

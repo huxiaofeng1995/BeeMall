@@ -47,4 +47,5 @@ app.controller('baseController' ,function($scope) {
         }
         //console.log($scope.selectedIds);
     }
+
 });

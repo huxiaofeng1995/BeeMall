@@ -3,6 +3,13 @@ package com.beemall.pojo;
 import java.io.Serializable;
 
 public class TbTypeTemplate implements Serializable{
+    /*
+    模板主要有两个作用：
+    1是用于关联品牌与规格
+    2定义扩充属性
+
+     */
+
     private Long id;
 
     private String name;

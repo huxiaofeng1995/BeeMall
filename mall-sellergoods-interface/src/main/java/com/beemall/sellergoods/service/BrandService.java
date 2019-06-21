@@ -41,4 +41,10 @@ public interface BrandService {
      * @return
      */
     public ResponseData findPageByExample(TbBrand brand, int pageNum,int pageSize);
+
+    /**
+     * 品牌下拉框数据
+     */
+    public ResponseData selectOptionList();
+
 }
