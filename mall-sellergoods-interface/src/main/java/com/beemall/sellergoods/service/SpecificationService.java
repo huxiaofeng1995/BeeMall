@@ -2,6 +2,7 @@ package com.beemall.sellergoods.service;
 import java.util.List;
 import com.beemall.pojo.TbSpecification;
 import com.beemall.entity.ResponseData;
+import com.beemall.pojogroup.Specification;
 
 /**
  * 服务层接口
@@ -27,13 +28,13 @@ public interface SpecificationService {
 	/**
 	 * 增加
 	*/
-	public ResponseData add(TbSpecification specification);
+	public ResponseData add(Specification specification);
 	
 	
 	/**
 	 * 修改
 	 */
-	public ResponseData update(TbSpecification specification);
+	public ResponseData update(Specification specification);
 	
 
 	/**
@@ -41,7 +42,7 @@ public interface SpecificationService {
 	 * @param id
 	 * @return
 	 */
-	public TbSpecification findOne(Long id);
+	public ResponseData findOne(Long id);
 	
 	
 	/**

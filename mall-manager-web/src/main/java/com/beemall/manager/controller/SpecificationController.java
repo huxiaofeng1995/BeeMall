@@ -2,6 +2,7 @@ package com.beemall.manager.controller;
 import java.util.List;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.pojogroup.Specification;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.pojo.TbSpecification;
@@ -44,7 +45,7 @@ public class SpecificationController {
 	 * @return
 	 */
 	@PostMapping("/add")
-	public ResponseData add(@RequestBody TbSpecification specification){
+	public ResponseData add(@RequestBody Specification specification){
 
 		return specificationService.add(specification);
 		
@@ -56,7 +57,7 @@ public class SpecificationController {
 	 * @return
 	 */
 	@PostMapping("/update")
-	public ResponseData update(@RequestBody TbSpecification specification){
+	public ResponseData update(@RequestBody Specification specification){
 		return specificationService.update(specification);
 	}	
 	
@@ -66,7 +67,7 @@ public class SpecificationController {
 	 * @return
 	 */
 	@GetMapping("/findOne")
-	public TbSpecification findOne(Long id){
+	public ResponseData findOne(Long id){
 		return specificationService.findOne(id);		
 	}
 	

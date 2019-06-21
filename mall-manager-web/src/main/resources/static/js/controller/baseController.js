@@ -28,4 +28,23 @@ app.controller('baseController' ,function($scope) {
 
     }
 
+    //全选按钮
+    $scope.checkAll = function($event) {
+        var checks = document.getElementsByClassName("testCheck")
+        if($event.target.checked){
+
+            for(var i = 0; i < checks.length; i++) {
+                checks[i].checked = true;
+            }
+            for(var i = 0; i < $scope.list.length; i++){
+                $scope.selectedIds.push($scope.list[i].id)//全选将当前页所有id加入被选中id数组中
+            }
+        }else {
+            for(var i = 0; i < checks.length; i++) {
+                checks[i].checked = false;
+            }
+            $scope.selectedIds = [];
+        }
+        //console.log($scope.selectedIds);
+    }
 });
