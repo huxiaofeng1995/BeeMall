@@ -140,5 +140,10 @@ public class SpecificationServiceImpl implements SpecificationService {
 		PageInfo<TbSpecification> pageInfo=   new PageInfo<>( specificationMapper.selectByExample(example));	
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
-	
+
+	@Override
+	public ResponseData selectOptionList() {
+		return ResponseDataUtil.buildSuccess(specificationMapper.selectOptionList());
+	}
+
 }

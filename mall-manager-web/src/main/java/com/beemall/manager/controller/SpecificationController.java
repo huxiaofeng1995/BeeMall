@@ -92,5 +92,9 @@ public class SpecificationController {
 	public ResponseData search(@RequestBody TbSpecification specification, int page, int size  ){
 		return specificationService.findPageByExample(specification, page, size);		
 	}
-	
+
+	@GetMapping("/selectOptionList")
+	public ResponseData selectOptionList(){
+		return specificationService.selectOptionList();
+	}
 }

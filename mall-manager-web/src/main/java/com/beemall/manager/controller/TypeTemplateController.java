@@ -1,6 +1,8 @@
 package com.beemall.manager.controller;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.beemall.entity.ResponseData;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -40,23 +42,35 @@ public class TypeTemplateController {
 	
 	/**
 	 * 增加
-	 * @param typeTemplate
+	 * @param typeTemplateJson
 	 * @return
 	 */
 	@PostMapping("/add")
-	public ResponseData add(@RequestBody TbTypeTemplate typeTemplate){
-
+	public ResponseData add(@RequestBody String typeTemplateJson){
+		JSONObject object = JSON.parseObject(typeTemplateJson);
+		TbTypeTemplate typeTemplate = new TbTypeTemplate();
+		typeTemplate.setName(object.getString("name"));
+		typeTemplate.setBrandIds(JSON.toJSONString(object.get("brandIds")));
+		typeTemplate.setSpecIds(JSON.toJSONString(object.get("specIds")));
+		typeTemplate.setCustomAttributeItems(JSON.toJSONString(object.get("customAttributeItems")));
 		return typeTemplateService.add(typeTemplate);
 		
 	}
 	
 	/**
 	 * 修改
-	 * @param typeTemplate
+	 * @param typeTemplateJson
 	 * @return
 	 */
 	@PostMapping("/update")
-	public ResponseData update(@RequestBody TbTypeTemplate typeTemplate){
+	public ResponseData update(@RequestBody String typeTemplateJson){
+		JSONObject object = JSON.parseObject(typeTemplateJson);
+		TbTypeTemplate typeTemplate = new TbTypeTemplate();
+		typeTemplate.setId(object.getLong("id"));
+		typeTemplate.setName(object.getString("name"));
+		typeTemplate.setBrandIds(JSON.toJSONString(object.get("brandIds")));
+		typeTemplate.setSpecIds(JSON.toJSONString(object.get("specIds")));
+		typeTemplate.setCustomAttributeItems(JSON.toJSONString(object.get("customAttributeItems")));
 		return typeTemplateService.update(typeTemplate);
 	}	
 	

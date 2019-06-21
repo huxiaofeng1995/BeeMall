@@ -58,5 +58,10 @@ public interface SpecificationService {
 	 * @return
 	 */
 	public ResponseData findPageByExample(TbSpecification specification, int pageNum, int pageSize);
+
+	/**
+	 * 规格下拉框数据
+	 */
+	public ResponseData selectOptionList();
 	
 }
