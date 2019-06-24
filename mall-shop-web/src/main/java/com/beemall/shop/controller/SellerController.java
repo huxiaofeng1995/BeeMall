@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.entity.ResponseData;
 import com.beemall.pojo.TbSeller;
 import com.beemall.sellergoods.service.SellerService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,10 @@ public class SellerController {
 	 */
 	@PostMapping("/add")
 	public ResponseData add(@RequestBody TbSeller seller){
+		//密码加密
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String password = passwordEncoder.encode(seller.getPassword());
+		seller.setPassword(password);
 
 		return sellerService.add(seller);
 		
