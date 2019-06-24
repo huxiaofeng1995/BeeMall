@@ -203,6 +203,7 @@
         <module>mall-sellergoods-interface</module>
         <module>mall-sellergoods-service</module>
 		<module>mall-manager-web</module>
-	</modules>
+        <module>mall-shop-web</module>
+    </modules>
 
 </project>
