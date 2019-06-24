@@ -1,4 +1,5 @@
 package com.beemall.sellergoods.service.impl;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -47,6 +48,8 @@ public class SellerServiceImpl implements SellerService {
 	 */
 	@Override
 	public ResponseData add(TbSeller seller) {
+		seller.setStatus("0");//状态 0---待审核
+		seller.setCreateTime(new Date());//申请日期
 		sellerMapper.insert(seller);	
 		return ResponseDataUtil.buildSuccess();		
 	}
