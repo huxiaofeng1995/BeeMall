@@ -79,10 +79,22 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
                     $scope.list=response.data.list;
                     $scope.paginationConf.totalItems=response.data.total;//更新总记录数
                 }else {
-                    alert("请求失败");
+                    alert(response.message);
                 }
 			}			
 		);
 	}
-    
-});	
+
+    $scope.updateStatus=function(sellerId,status){
+        sellerService.updateStatus(sellerId,status).success(
+            function(response){
+                if(response.code == "0000"){
+                    $scope.reloadList();//刷新列表
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
+    }
+
+});

@@ -57,5 +57,13 @@ public interface SellerService {
 	 * @return
 	 */
 	public ResponseData findPageByExample(TbSeller seller, int pageNum, int pageSize);
-	
+
+	/**
+	 * 更改状态
+	 * @param sellerId
+	 * @param status
+	 */
+	public ResponseData updateStatus(String sellerId,String status);
+
+
 }

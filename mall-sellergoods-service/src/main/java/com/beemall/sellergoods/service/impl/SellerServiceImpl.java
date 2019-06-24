@@ -166,5 +166,13 @@ public class SellerServiceImpl implements SellerService {
 		PageInfo<TbSeller> pageInfo=   new PageInfo<>( sellerMapper.selectByExample(example));	
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
-	
+
+	@Override
+	public ResponseData updateStatus(String sellerId, String status) {
+		TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
+		seller.setStatus(status);
+		sellerMapper.updateByPrimaryKey(seller);
+		return ResponseDataUtil.buildSuccess();
+	}
+
 }

@@ -91,5 +91,11 @@ public class SellerController {
 	public ResponseData search(@RequestBody TbSeller seller, int page, int size  ){
 		return sellerService.findPageByExample(seller, page, size);		
 	}
-	
+
+	@PostMapping("/updateStatus")
+	public ResponseData updateStatus(String sellerId, String status){
+		return sellerService.updateStatus(sellerId, status);
+	}
+
+
 }
