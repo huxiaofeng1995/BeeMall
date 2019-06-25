@@ -91,5 +91,15 @@ public class ItemCatController {
 	public ResponseData search(@RequestBody TbItemCat itemCat, int page, int size  ){
 		return itemCatService.findPageByExample(itemCat, page, size);		
 	}
-	
+
+	/**
+	 * 根据上级ID查询列表
+	 * @param parentId
+	 * @return
+	 */
+	@GetMapping("/findByParentId")
+	public ResponseData findByParentId(Long parentId){
+		return itemCatService.findByParentId(parentId);
+	}
+
 }

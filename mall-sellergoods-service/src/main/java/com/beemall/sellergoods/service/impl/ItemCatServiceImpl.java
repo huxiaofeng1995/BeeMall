@@ -100,5 +100,13 @@ public class ItemCatServiceImpl implements ItemCatService {
 		PageInfo<TbItemCat> pageInfo=   new PageInfo<>( itemCatMapper.selectByExample(example));	
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
-	
+
+	@Override
+	public ResponseData findByParentId(Long parentId) {
+		TbItemCatExample example=new TbItemCatExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andParentIdEqualTo(parentId);
+		return ResponseDataUtil.buildSuccess(itemCatMapper.selectByExample(example));
+	}
+
 }
