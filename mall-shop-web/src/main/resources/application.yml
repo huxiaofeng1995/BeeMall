@@ -1,6 +1,22 @@
 server:
   port: 9003
 
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5Mb
+      max-request-size: 10Mb
+
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 601
+  thumb-image: # 缩略图
+    width: 60
+    height: 60
+  tracker-list: # tracker地址
+    - 192.168.25.133:22122
+
 #dubbo
 dubbo:
   application:
@@ -12,3 +28,7 @@ dubbo:
 #   base-package: com.beemall.
   protocol:
     name: dubbo
+
+file:
+  server:
+    url: http://192.168.25.133/

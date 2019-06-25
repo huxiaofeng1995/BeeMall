@@ -39,6 +39,15 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.beemall</groupId>
             <artifactId>mall-sellergoods-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
