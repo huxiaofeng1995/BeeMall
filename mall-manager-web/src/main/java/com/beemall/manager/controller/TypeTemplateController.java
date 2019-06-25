@@ -105,5 +105,9 @@ public class TypeTemplateController {
 	public ResponseData search(@RequestBody TbTypeTemplate typeTemplate, int page, int size  ){
 		return typeTemplateService.findPageByExample(typeTemplate, page, size);		
 	}
-	
+
+	@GetMapping("/selectOptionList")
+	public ResponseData selectOptionList(){
+		return typeTemplateService.selectOptionList();
+	}
 }

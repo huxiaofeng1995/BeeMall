@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller   ,itemCatService, typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -25,7 +25,9 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
-	
+
+	$scope.parentId = 0;
+
 	//查询实体 
 	$scope.findOne=function(id){				
 		itemCatService.findOne(id).success(
@@ -41,12 +43,15 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
+            $scope.entity.parentId=$scope.parentId;//赋予上级ID
+            var obj = $scope.entity.typeId;//select2选中元素后传过来是一个对象
+            $scope.entity.typeId = obj.id;
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
 				if(response.code == "0000"){
-                    $scope.reloadList();
+                    $scope.findByParentId($scope.parentId);//重新加载
                 }else {
                     alert(response.message);
                 }
@@ -62,7 +67,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			function(response){
 				if(response.success){
 					if(response.code == "0000"){
-                        $scope.reloadList();//刷新列表
+                        $scope.findByParentId($scope.parentId);//重新加载
                     }
 				}						
 			}		
@@ -87,6 +92,9 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 
     //根据上级ID显示下级列表
     $scope.findByParentId=function(parentId){
+
+        $scope.parentId=parentId;//记住上级ID
+
         itemCatService.findByParentId(parentId).success(
             function(response){
                 if(response.code == "0000") {
@@ -118,6 +126,18 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
             $scope.entity_2=p_entity;
         }
         $scope.findByParentId(p_entity.id);	//查询此级下级列表
+    }
+
+    $scope.templateList = {data: []};//品牌列表
+    //读取品牌列表
+    $scope.findTemplateList = function () {
+        typeTemplateService.selectOptionList().success(
+            function (response) {
+                if (response.code == "0000") {
+                    $scope.templateList = {data: response.data};
+                }
+            }
+        );
     }
 
 });	

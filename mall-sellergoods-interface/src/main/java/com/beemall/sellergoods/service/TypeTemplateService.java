@@ -57,5 +57,6 @@ public interface TypeTemplateService {
 	 * @return
 	 */
 	public ResponseData findPageByExample(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
-	
+
+    public ResponseData selectOptionList();
 }

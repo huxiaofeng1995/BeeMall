@@ -109,5 +109,10 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		PageInfo<TbTypeTemplate> pageInfo=   new PageInfo<>( typeTemplateMapper.selectByExample(example));	
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
-	
+
+	@Override
+	public ResponseData selectOptionList() {
+		return ResponseDataUtil.buildSuccess(typeTemplateMapper.selectOptionList());
+	}
+
 }
