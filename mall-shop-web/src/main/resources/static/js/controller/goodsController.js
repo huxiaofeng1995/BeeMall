@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService, uploadService){
+app.controller('goodsController' ,function($scope,$controller   ,goodsService, uploadService, itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -38,12 +38,12 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService, u
 	//增加商品
 	$scope.add = function(){
 		$scope.entity.goodsDesc.introduction = editor.html();
-
+        $scope.entity.goodsDesc.itemImages = JSON.stringify($scope.entity.goodsDesc.itemImages)
         goodsService.add( $scope.entity ).success(
 			function(response){
 				if(response.code == "0000"){
                     alert("新增成功");
-                    $scope.entity = {};
+                    $scope.entity={goods:{},goodsDesc:{itemImages:[]}};
                     editor.html("")
                 }else {
                     alert(response.message);
@@ -109,5 +109,54 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService, u
     $scope.remove_image_entity=function(index){
         $scope.entity.goodsDesc.itemImages.splice(index,1);
     }
+
+    //读取一级分类
+    $scope.selectItemCat1List=function(){
+        itemCatService.findByParentId(0).success(
+            function(response){
+                if(response.code == "0000") {
+                    $scope.itemCat1List = response.data;
+                }else {
+                    alert(response.message);
+				}
+            }
+        );
+    }
+
+    //读取二级分类
+    $scope.$watch('entity.goods.category1Id', function(newValue, oldValue) {//监控
+        //根据选择的值，查询二级分类
+        itemCatService.findByParentId(newValue).success(
+            function(response){
+                if(response.code == "0000") {
+                    $scope.itemCat2List = response.data;
+                }else {
+                    alert(response.message);
+                }
+            }
+        );
+    });
+	//读取三级分类
+    $scope.$watch('entity.goods.category2Id', function(newValue, oldValue) {
+        //根据选择的值，查询二级分类
+        itemCatService.findByParentId(newValue).success(
+            function(response){
+                if(response.code == "0000") {
+                    $scope.itemCat3List = response.data;
+                }else {
+                    alert(response.message);
+                }
+            }
+        );
+    });
+
+    //三级分类选择后  读取模板ID
+    $scope.$watch('entity.goods.category3Id', function(newValue, oldValue) {
+        itemCatService.findOne(newValue).success(
+            function(response){
+                $scope.entity.goods.typeTemplateId=response.typeId; //更新模板ID
+            }
+        );
+    });
 
 });	
