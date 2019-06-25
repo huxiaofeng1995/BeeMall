@@ -1,5 +1,8 @@
 package com.beemall.sellergoods.service.impl;
 import java.util.List;
+
+import com.beemall.mapper.TbGoodsDescMapper;
+import com.beemall.pojogroup.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
@@ -23,6 +26,9 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
 	private TbGoodsMapper goodsMapper;
+
+	@Autowired
+	private TbGoodsDescMapper goodsDescMapper;
 	
 	/**
 	 * 查询全部
@@ -46,8 +52,12 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 增加
 	 */
 	@Override
-	public ResponseData add(TbGoods goods) {
-		goodsMapper.insert(goods);	
+	public ResponseData add(Goods goods) {
+		TbGoods tbGoods = goods.getGoods();
+		tbGoods.setAuditStatus("0");//状态未审核
+		goodsMapper.insert(tbGoods);
+		goods.getGoodsDesc().setGoodsId(tbGoods.getId());
+		goodsDescMapper.insert(goods.getGoodsDesc());
 		return ResponseDataUtil.buildSuccess();		
 	}
 

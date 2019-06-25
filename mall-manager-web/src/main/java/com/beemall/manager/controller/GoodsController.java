@@ -38,18 +38,7 @@ public class GoodsController {
 		return goodsService.findPage(page, size);
 	}
 	
-	/**
-	 * 增加
-	 * @param goods
-	 * @return
-	 */
-	@PostMapping("/add")
-	public ResponseData add(@RequestBody TbGoods goods){
 
-		return goodsService.add(goods);
-		
-	}
-	
 	/**
 	 * 修改
 	 * @param goods

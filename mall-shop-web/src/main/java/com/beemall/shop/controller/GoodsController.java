@@ -3,7 +3,9 @@ package com.beemall.shop.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.entity.ResponseData;
 import com.beemall.pojo.TbGoods;
+import com.beemall.pojogroup.Goods;
 import com.beemall.sellergoods.service.GoodsService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,8 +47,9 @@ public class GoodsController {
 	 * @return
 	 */
 	@PostMapping("/add")
-	public ResponseData add(@RequestBody TbGoods goods){
-
+	public ResponseData add(@RequestBody Goods goods){
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();//获取商家ID
+		goods.getGoods().setSellerId(sellerId);
 		return goodsService.add(goods);
 		
 	}

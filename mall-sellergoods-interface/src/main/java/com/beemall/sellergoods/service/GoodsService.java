@@ -2,6 +2,7 @@ package com.beemall.sellergoods.service;
 import java.util.List;
 import com.beemall.pojo.TbGoods;
 import com.beemall.entity.ResponseData;
+import com.beemall.pojogroup.Goods;
 
 /**
  * 服务层接口
@@ -27,7 +28,7 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public ResponseData add(TbGoods goods);
+	public ResponseData add(Goods goods);
 	
 	
 	/**
