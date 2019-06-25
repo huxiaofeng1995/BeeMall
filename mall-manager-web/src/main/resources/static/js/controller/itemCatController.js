@@ -41,6 +41,8 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
 		if($scope.entity.id!=null){//如果有ID
+            var obj = $scope.entity.typeId;//select2选中元素后传过来是一个对象
+            $scope.entity.typeId = obj.id;
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
             $scope.entity.parentId=$scope.parentId;//赋予上级ID
@@ -61,17 +63,19 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	
 	 
 	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		itemCatService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.success){
-					if(response.code == "0000"){
+	$scope.dele=function(){
+        if(confirm("确定要删除吗？")) {
+            //获取选中的复选框
+            itemCatService.dele($scope.selectedIds).success(
+                function (response) {
+                    if (response.code == "0000") {
                         $scope.findByParentId($scope.parentId);//重新加载
+                    } else {
+                        alert(response.message)
                     }
-				}						
-			}		
-		);				
+                }
+            );
+        }
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 

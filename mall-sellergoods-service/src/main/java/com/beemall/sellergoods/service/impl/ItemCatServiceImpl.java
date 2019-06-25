@@ -76,9 +76,23 @@ public class ItemCatServiceImpl implements ItemCatService {
 	 */
 	@Override
 	public ResponseData delete(Long[] ids) {
+		boolean delFlag = true;//所有要删的分类中，若有任意其中一个分类含有子分类，则拒绝这次删除请求
 		for(Long id:ids){
-			itemCatMapper.deleteByPrimaryKey(id);
-		}	
+			TbItemCatExample example=new TbItemCatExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andParentIdEqualTo(id);
+			if(itemCatMapper.selectByExample(example).size() > 0){
+				delFlag = false;
+				return ResponseDataUtil.buildError("选中的分类中部分含有子分类，无法执行删除操作");
+			}else {
+				continue;
+			}
+		}
+		if(delFlag){
+			for(Long id:ids){
+				itemCatMapper.deleteByPrimaryKey(id);
+			}
+		}
 		return ResponseDataUtil.buildSuccess();
 	}
 	

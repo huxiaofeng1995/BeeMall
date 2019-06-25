@@ -65,6 +65,8 @@ app.controller('typeTemplateController' ,function($scope,$controller,typeTemplat
             function (response) {
                 if (response.code == "0000") {
                     $scope.reloadList();//刷新列表
+                }else {
+                    alert(response.message)
                 }
             }
         );

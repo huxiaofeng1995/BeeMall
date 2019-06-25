@@ -1,7 +1,11 @@
 package com.beemall.manager.controller;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.pojo.TbTypeTemplate;
+import com.beemall.sellergoods.service.TypeTemplateService;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.pojo.TbItemCat;
@@ -18,6 +22,9 @@ public class ItemCatController {
 
 	@Reference
 	private ItemCatService itemCatService;
+
+	@Reference
+	private TypeTemplateService typeTemplateService;
 	
 	/**
 	 * 返回全部列表
@@ -66,8 +73,19 @@ public class ItemCatController {
 	 * @return
 	 */
 	@GetMapping("/findOne")
-	public TbItemCat findOne(Long id){
-		return itemCatService.findOne(id);		
+	public Map<String, Object> findOne(Long id){
+		//自定义返回结果
+		Map<String, Object> map = new HashMap<>();
+		TbItemCat cat = itemCatService.findOne(id);
+		map.put("id", cat.getId());
+		map.put("name", cat.getName());
+		map.put("parentId", cat.getParentId());
+		Map<String, Object> typeMap = new HashMap<>();
+		TbTypeTemplate template = typeTemplateService.findOne(cat.getTypeId());
+		typeMap.put("id", template.getId());
+		typeMap.put("text", template.getName());
+		map.put("typeId",typeMap);
+		return map;
 	}
 	
 	/**

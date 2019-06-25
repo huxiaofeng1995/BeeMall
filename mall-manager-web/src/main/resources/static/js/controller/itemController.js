@@ -58,14 +58,12 @@ app.controller('itemController' ,function($scope,$controller   ,itemService){
 	//批量删除 
 	$scope.dele=function(){			
 		//获取选中的复选框			
-		itemService.dele( $scope.selectIds ).success(
+		itemService.dele( $scope.selectedIds ).success(
 			function(response){
-				if(response.success){
 					if(response.code == "0000"){
                         $scope.reloadList();//刷新列表
                     }
-				}						
-			}		
+			}
 		);				
 	}
 	
