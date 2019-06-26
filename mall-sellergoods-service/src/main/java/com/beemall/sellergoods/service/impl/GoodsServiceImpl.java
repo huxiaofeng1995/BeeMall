@@ -15,6 +15,7 @@ import com.beemall.entity.ResponseData;
 import com.beemall.entity.ResponseDataUtil;
 import com.beemall.pojo.TbGoodsExample.Criteria;
 import com.beemall.sellergoods.service.GoodsService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -23,6 +24,7 @@ import com.beemall.sellergoods.service.GoodsService;
  *
  */
 @Service
+@Transactional
 public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
@@ -70,6 +72,7 @@ public class GoodsServiceImpl implements GoodsService {
 		TbGoods tbGoods = goods.getGoods();
 		tbGoods.setAuditStatus("0");//状态未审核
 		goodsMapper.insert(tbGoods);
+		//int x = 1/0; //测试事务
 		//插入商品详情表
 		goods.getGoodsDesc().setGoodsId(tbGoods.getId());
 		goodsDescMapper.insert(goods.getGoodsDesc());
