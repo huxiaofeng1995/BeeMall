@@ -58,5 +58,13 @@ public interface GoodsService {
 	 * @return
 	 */
 	public ResponseData findPageByExample(TbGoods goods, int pageNum, int pageSize);
-	
+
+	/**
+	 * 批量修改状态
+	 * @param ids
+	 * @param status
+	 */
+	public ResponseData updateStatus(Long []ids,String status);
+
+
 }

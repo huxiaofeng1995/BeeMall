@@ -81,5 +81,15 @@ public class GoodsController {
 	public ResponseData search(@RequestBody TbGoods goods, int page, int size  ){
 		return goodsService.findPageByExample(goods, page, size);		
 	}
-	
+
+	/**
+	 * 更新状态
+	 * @param ids
+	 * @param status
+	 */
+	@PostMapping("/updateStatus")
+	public ResponseData updateStatus(Long[] ids, String status){
+		return 	goodsService.updateStatus(ids, status);
+	}
+
 }

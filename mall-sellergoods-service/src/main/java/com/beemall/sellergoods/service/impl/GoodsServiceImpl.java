@@ -186,7 +186,9 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public ResponseData delete(Long[] ids) {
 		for(Long id:ids){
-			goodsMapper.deleteByPrimaryKey(id);
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setIsDelete("1");
+			goodsMapper.updateByPrimaryKey(goods);
 		}	
 		return ResponseDataUtil.buildSuccess();
 	}
@@ -223,14 +225,21 @@ public class GoodsServiceImpl implements GoodsService {
 			if(goods.getIsEnableSpec()!=null && goods.getIsEnableSpec().length()>0){
 				criteria.andIsEnableSpecLike("%"+goods.getIsEnableSpec()+"%");
 			}
-			if(goods.getIsDelete()!=null && goods.getIsDelete().length()>0){
-				criteria.andIsDeleteLike("%"+goods.getIsDelete()+"%");
-			}
-	
 		}
+		criteria.andIsDeleteIsNull();//非删除状态
 		
 		PageInfo<TbGoods> pageInfo=   new PageInfo<>( goodsMapper.selectByExample(example));	
 		return ResponseDataUtil.buildSuccess(pageInfo);
 	}
-	
+
+	@Override
+	public ResponseData updateStatus(Long[] ids, String status) {
+		for(Long id : ids){
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setAuditStatus(status);
+			goodsMapper.updateByPrimaryKey(goods);
+		}
+		return ResponseDataUtil.buildSuccess();
+	}
+
 }
