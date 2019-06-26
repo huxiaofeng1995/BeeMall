@@ -2,7 +2,9 @@
 app.controller('goodsController' ,function($scope,$controller   ,goodsService, uploadService, itemCatService, typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+
+    $scope.entity={ goods:{}, goodsDesc:{itemImages:[],specificationItems:[]},itemList:[]  };
+
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		goodsService.findAll().success(
@@ -38,14 +40,25 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService, u
 	//增加商品
 	$scope.add = function(){
 		$scope.entity.goodsDesc.introduction = editor.html();
+		//用stringify方法转化一些传值对象，不转化后端会报错
+        //去除$$hashKey
         $scope.entity.goodsDesc.itemImages = JSON.stringify($scope.entity.goodsDesc.itemImages)
         $scope.entity.goodsDesc.specificationItems = JSON.stringify($scope.entity.goodsDesc.specificationItems)
+
+        $scope.entity.goodsDesc.customAttributeItems = JSON.stringify($scope.entity.goodsDesc.customAttributeItems);
+        for(var i = 0;i < $scope.entity.itemList.length;i++){
+            var item = $scope.entity.itemList[i];
+            item.spec = JSON.stringify(item.spec);
+        }
+
+
         goodsService.add( $scope.entity ).success(
 			function(response){
 				if(response.code == "0000"){
                     alert("新增成功");
-                    $scope.entity={goods:{},goodsDesc:{itemImages:[]}};
+                    $scope.entity={ good:{}, goodsDesc:{itemImages:[],specificationItems:[]},itemList:[]  };
                     editor.html("")
+                    location.reload()
                 }else {
                     alert(response.message);
                 }
@@ -99,7 +112,6 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService, u
         });
     };
 
-    $scope.entity={goods:{},goodsDesc:{itemImages:[]}};//定义页面实体结构
 
     //添加图片列表
     $scope.add_image_entity=function(){
@@ -126,60 +138,66 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService, u
 
     //读取二级分类//这里使用监控的方式实现，其实也可以使用ng-change指令来实现
     $scope.$watch('entity.goods.category1Id', function(newValue, oldValue) {//监控
-        //根据选择的值，查询二级分类
-        itemCatService.findByParentId(newValue).success(
-            function(response){
-                if(response.code == "0000") {
-                    $scope.itemCat2List = response.data;
-                }else {
-                    alert(response.message);
+        if(newValue){
+            //根据选择的值，查询二级分类
+            itemCatService.findByParentId(newValue).success(
+                function(response){
+                    if(response.code == "0000") {
+                        $scope.itemCat2List = response.data;
+                    }else {
+                        alert(response.message);
+                    }
                 }
-            }
-        );
+            );
+        }
     });
 	//读取三级分类
     $scope.$watch('entity.goods.category2Id', function(newValue, oldValue) {
-        //根据选择的值，查询二级分类
-        itemCatService.findByParentId(newValue).success(
-            function(response){
-                if(response.code == "0000") {
-                    $scope.itemCat3List = response.data;
-                }else {
-                    alert(response.message);
+        if(newValue) {
+            //根据选择的值，查询二级分类
+            itemCatService.findByParentId(newValue).success(
+                function (response) {
+                    if (response.code == "0000") {
+                        $scope.itemCat3List = response.data;
+                    } else {
+                        alert(response.message);
+                    }
                 }
-            }
-        );
+            );
+        }
     });
 
     //三级分类选择后  读取模板ID
     $scope.$watch('entity.goods.category3Id', function(newValue, oldValue) {
-        itemCatService.findOne(newValue).success(
-            function(response){
-                $scope.entity.goods.typeTemplateId=response.typeId; //更新模板ID
-            }
-        );
+        if(newValue) {
+            itemCatService.findOne(newValue).success(
+                function (response) {
+                    $scope.entity.goods.typeTemplateId = response.typeId; //更新模板ID
+                }
+            );
+        }
     });
 
     //模板ID选择后  更新品牌列表
     $scope.$watch('entity.goods.typeTemplateId', function(newValue, oldValue) {
-        typeTemplateService.findOne(newValue).success(
-            function(response){
-                $scope.typeTemplate=response;//获取类型模板
-                $scope.typeTemplate.brandIds= JSON.parse( $scope.typeTemplate.brandIds);//品牌列表
-                $scope.entity.goodsDesc.customAttributeItems=JSON.parse( $scope.typeTemplate.customAttributeItems);//扩展属性
-            }
-        );
-        //查询规格列表
-        typeTemplateService.findSpecList(newValue).success(
-            function(response){
-                if(response.code == "0000") {
-                    $scope.specList=response.data;
+        if(newValue) {
+            typeTemplateService.findOne(newValue).success(
+                function (response) {
+                    $scope.typeTemplate = response;//获取类型模板
+                    $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);//品牌列表
+                    $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);//扩展属性
                 }
-            }
-        );
+            );
+            //查询规格列表
+            typeTemplateService.findSpecList(newValue).success(
+                function (response) {
+                    if (response.code == "0000") {
+                        $scope.specList = response.data;
+                    }
+                }
+            );
+        }
     });
-
-    $scope.entity={ goodsDesc:{itemImages:[],specificationItems:[]}  };
 
     $scope.updateSpecAttribute=function($event,name,value){
         var object= $scope.searchObjectByKey(

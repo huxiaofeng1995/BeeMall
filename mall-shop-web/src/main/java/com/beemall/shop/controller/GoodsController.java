@@ -51,7 +51,6 @@ public class GoodsController {
 		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();//获取商家ID
 		goods.getGoods().setSellerId(sellerId);
 		return goodsService.add(goods);
-		
 	}
 	
 	/**
