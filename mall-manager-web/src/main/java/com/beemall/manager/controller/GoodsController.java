@@ -2,6 +2,7 @@ package com.beemall.manager.controller;
 import java.util.List;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.pojogroup.Goods;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.pojo.TbGoods;
@@ -45,7 +46,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@PostMapping("/update")
-	public ResponseData update(@RequestBody TbGoods goods){
+	public ResponseData update(@RequestBody Goods goods){
 		return goodsService.update(goods);
 	}	
 	
@@ -55,7 +56,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@GetMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	

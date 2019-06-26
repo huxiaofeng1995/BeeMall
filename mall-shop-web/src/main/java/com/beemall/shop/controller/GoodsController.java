@@ -2,6 +2,7 @@ package com.beemall.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.entity.ResponseData;
+import com.beemall.entity.ResponseDataUtil;
 import com.beemall.pojo.TbGoods;
 import com.beemall.pojogroup.Goods;
 import com.beemall.sellergoods.service.GoodsService;
@@ -59,7 +60,15 @@ public class GoodsController {
 	 * @return
 	 */
 	@PostMapping("/update")
-	public ResponseData update(@RequestBody TbGoods goods){
+	public ResponseData update(@RequestBody Goods goods){
+		//校验是否是当前商家的id
+		Goods goods2 = goodsService.findOne(goods.getGoods().getId());
+		//获取当前登录的商家ID
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		//如果传递过来的商家ID并不是当前登录的用户的ID,则属于非法操作
+		if(!goods2.getGoods().getSellerId().equals(sellerId) ||  !goods.getGoods().getSellerId().equals(sellerId) ){
+			return ResponseDataUtil.buildError("操作非法");
+		}
 		return goodsService.update(goods);
 	}	
 	

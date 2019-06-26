@@ -34,7 +34,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public ResponseData update(TbGoods goods);
+	public ResponseData update(Goods goods);
 	
 
 	/**

@@ -50,6 +50,13 @@ app.controller('goodsController' ,function($scope,$controller, $location  ,goods
                 //规格
                 $scope.entity.goodsDesc.specificationItems=JSON.parse($scope.entity.goodsDesc.specificationItems);
                 //console.log($scope.entity.goodsDesc.specificationItems)
+
+                //SKU列表规格列转换
+                for( var i=0;i<$scope.entity.itemList.length;i++ ){
+                    $scope.entity.itemList[i].spec =
+                        JSON.parse( $scope.entity.itemList[i].spec);
+                }
+
             }
         );
     }
@@ -69,27 +76,37 @@ app.controller('goodsController' ,function($scope,$controller, $location  ,goods
         }
     }
 
-
-
-    //增加商品
-	$scope.add = function(){
-		$scope.entity.goodsDesc.introduction = editor.html();
-		//用stringify方法转化一些传值对象，不转化后端会报错
+    //修改和新增商品传参预处理
+    $scope.preHandleEntity=function(){
+        //用stringify方法转化一些传值对象，不转化后端会报错
         //页面需去除$$hashKey
         $scope.entity.goodsDesc.itemImages = JSON.stringify($scope.entity.goodsDesc.itemImages)
         $scope.entity.goodsDesc.specificationItems = JSON.stringify($scope.entity.goodsDesc.specificationItems)
 
         $scope.entity.goodsDesc.customAttributeItems = JSON.stringify($scope.entity.goodsDesc.customAttributeItems);
-        for(var i = 0;i < $scope.entity.itemList.length;i++){
+        for (var i = 0; i < $scope.entity.itemList.length; i++) {
             var item = $scope.entity.itemList[i];
             item.spec = JSON.stringify(item.spec);
         }
+    }
 
+    //增加商品
+	$scope.save = function(){
+		$scope.entity.goodsDesc.introduction = editor.html();
 
-        goodsService.add( $scope.entity ).success(
+		var serviceObject;
+		if($scope.entity.goods.id != null) {
+            $scope.preHandleEntity()
+            serviceObject = goodsService.update($scope.entity)
+        }else {
+            $scope.preHandleEntity()
+
+            serviceObject = goodsService.add($scope.entity)
+        }
+            serviceObject.success(
 			function(response){
 				if(response.code == "0000"){
-                    alert("新增成功");
+                    alert("保存成功");
                     $scope.entity={ good:{}, goodsDesc:{itemImages:[],specificationItems:[]},itemList:[]  };
                     editor.html("")
                     location.href="goods.html";
