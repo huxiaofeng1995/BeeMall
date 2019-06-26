@@ -59,4 +59,11 @@ public interface TypeTemplateService {
 	public ResponseData findPageByExample(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
 
     public ResponseData selectOptionList();
+
+	/**
+	 * 返回规格列表
+	 * @return
+	 */
+	public ResponseData findSpecList(Long id);
+
 }
