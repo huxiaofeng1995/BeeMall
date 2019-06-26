@@ -28,5 +28,11 @@ app.service('goodsService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search?page='+page+"&size="+rows, searchEntity);
-	}    	
+	}
+
+    //更改上下架状态
+    this.updateMarketStatus=function(id,status){
+        return $http.post('../goods/updateMarketStatus?id='+id+"&status="+status);
+    }
+
 });

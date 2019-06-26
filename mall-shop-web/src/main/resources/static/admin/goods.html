@@ -99,6 +99,12 @@
                                           </td>
                                           <td class="text-center">
                                          	  <a type="button" class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>
+                                         	  <span ng-if="entity.auditStatus=='1'&&entity.isMarketable!='1'">
+                                                    <button type="button" class="btn bg-olive btn-xs" ng-click="updateMarketStatus(entity.id,'1')">上架</button>
+                                              </span>
+                                              <span ng-if="entity.auditStatus=='1'&&entity.isMarketable=='1'">
+                                                  <button type="button" class="btn btn-xs btn-danger" ng-click="updateMarketStatus(entity.id,'0')">下架</button>
+                                              </span>
                                           </td>
                                       </tr>
 

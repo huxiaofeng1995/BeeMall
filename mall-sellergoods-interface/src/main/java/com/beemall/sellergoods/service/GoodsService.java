@@ -66,5 +66,10 @@ public interface GoodsService {
 	 */
 	public ResponseData updateStatus(Long []ids,String status);
 
-
+	/**
+	 * 修改上下架状态
+	 * @param id
+	 * @param status
+	 */
+	public ResponseData updateMarketStatus(Long id, String status);
 }

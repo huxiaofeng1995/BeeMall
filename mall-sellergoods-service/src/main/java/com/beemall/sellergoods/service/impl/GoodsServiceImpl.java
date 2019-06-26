@@ -242,4 +242,12 @@ public class GoodsServiceImpl implements GoodsService {
 		return ResponseDataUtil.buildSuccess();
 	}
 
+	@Override
+	public ResponseData updateMarketStatus(Long id, String status) {
+		TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+		goods.setIsMarketable(status);
+		goodsMapper.updateByPrimaryKey(goods);
+		return ResponseDataUtil.buildSuccess();
+	}
+
 }

@@ -108,5 +108,14 @@ public class GoodsController {
 
 		return goodsService.findPageByExample(goods, page, size);		
 	}
-	
+
+	/**
+	 * 更新上下架状态
+	 * @param id
+	 * @param status
+	 */
+	@PostMapping("/updateMarketStatus")
+	public ResponseData updateMarketStatus(Long id, String status){
+		return 	goodsService.updateMarketStatus(id, status);
+	}
 }

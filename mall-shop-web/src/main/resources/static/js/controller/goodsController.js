@@ -310,5 +310,16 @@ app.controller('goodsController' ,function($scope,$controller, $location  ,goods
         );
     }
 
-
+    //更改状态
+    $scope.updateMarketStatus=function(id, status){
+        goodsService.updateMarketStatus(id,status).success(
+            function(response){
+                if(response.code == "0000"){
+                    $scope.reloadList();//刷新列表
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
+    }
 });	
