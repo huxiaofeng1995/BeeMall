@@ -69,7 +69,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@GetMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	

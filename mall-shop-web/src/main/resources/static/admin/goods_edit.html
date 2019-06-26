@@ -31,7 +31,7 @@
      <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="beemall" ng-controller="goodsController" ng-init="selectItemCat1List()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="beemall" ng-controller="goodsController" ng-init="selectItemCat1List();findOne()">
 
             <!-- 正文区域 -->
             <section class="content">
@@ -196,7 +196,7 @@
 					                        <div class="col-md-10 data">
 					                               
 					                            <span ng-repeat="op in spec.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,spec.text,op.optionName);createItemList()">{{op.optionName}}
+					                            	<input  type="checkbox" ng-checked="checkAttributeValue(spec.text,op.optionName)" ng-click="updateSpecAttribute($event,spec.text,op.optionName);createItemList()">{{op.optionName}}
 					                            </span>  	
 
 					                        </div>
@@ -255,7 +255,7 @@
                    </div>
                   <div class="btn-toolbar list-toolbar">
 				      <button class="btn btn-primary"  ng-click="add()"><i class="fa fa-save"></i>保存</button>
-				      <button class="btn btn-default" >返回列表</button>
+				      <a class="btn btn-default" href="goods.html" >返回列表</a>
 				  </div>
 			
             </section>
