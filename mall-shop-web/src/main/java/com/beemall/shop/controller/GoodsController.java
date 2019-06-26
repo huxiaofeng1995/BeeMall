@@ -92,6 +92,11 @@ public class GoodsController {
 	 */
 	@PostMapping("/search")
 	public ResponseData search(@RequestBody TbGoods goods, int page, int size  ){
+		//获取商家ID
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		//添加查询条件
+		goods.setSellerId(sellerId);
+
 		return goodsService.findPageByExample(goods, page, size);		
 	}
 	
