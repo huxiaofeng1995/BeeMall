@@ -154,7 +154,7 @@ app.controller('goodsController' ,function($scope,$controller, $location  ,goods
     $scope.uploadFile=function(){
         uploadService.uploadFile().success(function(response) {
             if(response.code == "0000"){//如果上传成功，取出url
-                $scope.image_entity.url=response.data.url;//设置文件地址
+                $scope.image_entity.pic=response.data.url;//设置文件地址
             }else{
                 alert(response.message);
             }

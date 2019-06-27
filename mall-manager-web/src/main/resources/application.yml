@@ -28,3 +28,7 @@ fdfs:
     height: 60
   tracker-list: # tracker地址
     - 192.168.25.133:22122
+
+file:
+  server:
+    url: http://192.168.25.133/

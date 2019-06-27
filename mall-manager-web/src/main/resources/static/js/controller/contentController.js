@@ -1,5 +1,5 @@
  //控制层 
-app.controller('contentController' ,function($scope,$controller   ,contentService){	
+app.controller('contentController' ,function($scope,$controller ,contentService, uploadService, contentCategoryService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -58,13 +58,11 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 	//批量删除 
 	$scope.dele=function(){			
 		//获取选中的复选框			
-		contentService.dele( $scope.selectIds ).success(
+		contentService.dele( $scope.selectedIds ).success(
 			function(response){
-				if(response.success){
-					if(response.code == "0000"){
-                        $scope.reloadList();//刷新列表
-                    }
-				}						
+				if(response.code == "0000"){
+					$scope.reloadList();//刷新列表
+				}
 			}		
 		);				
 	}
@@ -84,5 +82,29 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 			}			
 		);
 	}
-    
+
+
+	//上传图片
+    $scope.uploadFile=function(){
+        uploadService.uploadFile().success(function(response) {
+            if(response.code == "0000"){//如果上传成功，取出url
+                $scope.entity.pic=response.data.url;//设置文件地址
+            }else{
+                alert(response.message);
+            }
+        }).error(function() {
+            alert("上传发生错误");
+        });
+    };
+
+    //加载广告分类列表
+    $scope.findContentCategoryList=function(){
+        contentCategoryService.findAll().success(
+            function(response){
+                $scope.contentCategoryList=response;
+            }
+        );
+    }
+
+    $scope.status=["无效","有效"];
 });	
