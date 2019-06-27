@@ -12,6 +12,7 @@ import com.beemall.pojo.TbSeller;
 import com.beemall.pojo.TbSellerExample;
 import com.beemall.pojo.TbSellerExample.Criteria;
 import com.beemall.sellergoods.service.SellerService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -20,6 +21,7 @@ import com.beemall.sellergoods.service.SellerService;
  *
  */
 @Service
+@Transactional
 public class SellerServiceImpl implements SellerService {
 
 	@Autowired

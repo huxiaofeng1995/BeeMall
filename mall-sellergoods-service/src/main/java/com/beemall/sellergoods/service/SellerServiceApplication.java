@@ -1,4 +1,4 @@
-package com.beemall.sellergoods;
+package com.beemall.sellergoods.service;
 
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;

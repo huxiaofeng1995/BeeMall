@@ -10,10 +10,12 @@ import com.beemall.sellergoods.service.BrandService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
 	@Autowired

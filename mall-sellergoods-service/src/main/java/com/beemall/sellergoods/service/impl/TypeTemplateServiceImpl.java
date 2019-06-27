@@ -17,6 +17,7 @@ import com.beemall.pojo.TbTypeTemplate;
 import com.beemall.pojo.TbTypeTemplateExample;
 import com.beemall.pojo.TbTypeTemplateExample.Criteria;
 import com.beemall.sellergoods.service.TypeTemplateService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -25,6 +26,7 @@ import com.beemall.sellergoods.service.TypeTemplateService;
  *
  */
 @Service
+@Transactional
 public class TypeTemplateServiceImpl implements TypeTemplateService {
 
 	@Autowired

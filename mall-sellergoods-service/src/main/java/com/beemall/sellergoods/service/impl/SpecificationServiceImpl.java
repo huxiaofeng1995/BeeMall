@@ -16,6 +16,7 @@ import com.beemall.pojo.TbSpecification;
 import com.beemall.pojo.TbSpecificationExample;
 import com.beemall.pojo.TbSpecificationExample.Criteria;
 import com.beemall.sellergoods.service.SpecificationService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -24,6 +25,7 @@ import com.beemall.sellergoods.service.SpecificationService;
  *
  */
 @Service
+@Transactional
 public class SpecificationServiceImpl implements SpecificationService {
 
 	@Autowired

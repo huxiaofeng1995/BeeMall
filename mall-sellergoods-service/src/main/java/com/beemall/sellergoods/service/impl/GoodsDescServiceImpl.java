@@ -11,6 +11,7 @@ import com.beemall.pojo.TbGoodsDesc;
 import com.beemall.pojo.TbGoodsDescExample;
 import com.beemall.pojo.TbGoodsDescExample.Criteria;
 import com.beemall.sellergoods.service.GoodsDescService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -19,6 +20,7 @@ import com.beemall.sellergoods.service.GoodsDescService;
  *
  */
 @Service
+@Transactional
 public class GoodsDescServiceImpl implements GoodsDescService {
 
 	@Autowired

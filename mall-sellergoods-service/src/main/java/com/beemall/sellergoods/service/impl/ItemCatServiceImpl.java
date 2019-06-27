@@ -11,6 +11,7 @@ import com.beemall.pojo.TbItemCat;
 import com.beemall.pojo.TbItemCatExample;
 import com.beemall.pojo.TbItemCatExample.Criteria;
 import com.beemall.sellergoods.service.ItemCatService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -19,6 +20,7 @@ import com.beemall.sellergoods.service.ItemCatService;
  *
  */
 @Service
+@Transactional
 public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
