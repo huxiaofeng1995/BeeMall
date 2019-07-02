@@ -186,6 +186,7 @@
         <module>mall-portal-web</module>
 		<module>mall-search-interface</module>
         <module>mall-search-service</module>
-    </modules>
+		<module>mall-search-web</module>
+	</modules>
 
 </project>
