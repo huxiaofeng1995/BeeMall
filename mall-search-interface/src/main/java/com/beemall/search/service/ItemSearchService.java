@@ -1,5 +1,7 @@
 package com.beemall.search.service;
 
+import com.beemall.entity.ResponseData;
+
 import java.util.Map;
 
 public interface ItemSearchService {
@@ -8,6 +10,6 @@ public interface ItemSearchService {
      * @param searchMap 查询条件
      * @return
      */
-    public Map<String,Object> search(Map searchMap);
+    public ResponseData search(Map searchMap);
 
 }

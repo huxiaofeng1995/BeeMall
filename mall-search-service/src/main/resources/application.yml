@@ -1,5 +1,5 @@
 server:
-  port: 9004
+  port: 9005
 
 #dubbo
 dubbo:
@@ -19,3 +19,4 @@ spring:
   data:
     solr:
       host: http://127.0.0.1:8983/solr
+      core: mall_core
