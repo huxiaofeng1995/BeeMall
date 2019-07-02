@@ -16,6 +16,9 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
+  data:
+    solr:
+      host: http://127.0.0.1:8983/solr
 
 #dubbo
 dubbo:

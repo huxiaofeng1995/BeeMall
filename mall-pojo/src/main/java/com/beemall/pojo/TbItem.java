@@ -1,12 +1,18 @@
 package com.beemall.pojo;
 
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.Dynamic;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class TbItem implements Serializable{
+    @Field
     private Long id;
 
+    @Field("item_title")
     private String title;
 
     private String sellPoint;
@@ -19,8 +25,10 @@ public class TbItem implements Serializable{
 
     private String barcode;
 
+    @Field("item_image")
     private String image;
 
+    @Field("item_category")
     private Long categoryid;
 
     private String status;
@@ -37,6 +45,7 @@ public class TbItem implements Serializable{
 
     private String isDefault;
 
+    @Field("item_goodsid")
     private Long goodsId;
 
     private String sellerId;
@@ -45,11 +54,38 @@ public class TbItem implements Serializable{
 
     private String category;
 
+    @Field("item_brand")
     private String brand;
 
+    @Field("item_spec")
     private String spec;
 
+    @Field("item_seller")
     private String seller;
+
+    @Field("item_price")
+    private Double solrPrice;
+
+    public Double getSolrPrice() {
+        return solrPrice;
+    }
+
+    public void setSolrPrice(Double solrPrice) {
+        this.solrPrice = solrPrice;
+    }
+
+    @Dynamic
+    @Field("item_spec_*")
+    private Map<String,String> specMap;//高版本solr中key值不能带中文，否则会被自动转换为下划线 _
+
+    public Map<String, String> getSpecMap() {
+        return specMap;
+    }
+
+    public void setSpecMap(Map<String, String> specMap) {
+        this.specMap = specMap;
+    }
+
 
     public Long getId() {
         return id;
