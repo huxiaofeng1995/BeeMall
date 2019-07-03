@@ -8,6 +8,7 @@ import com.beemall.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
@@ -29,6 +30,9 @@ public class ItemSearchServiceImpl implements ItemSearchService{
     @Autowired
     private SolrTemplate solrTemplate;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Value("${spring.data.solr.core}")
     private String solrCore;
 
@@ -36,7 +40,11 @@ public class ItemSearchServiceImpl implements ItemSearchService{
     public ResponseData search(Map searchMap) {
         Map<String, Object> map = new HashMap<>();
         map.put("rows",searchItemList(searchMap));
-        map.put("categoryList", searchCateList(searchMap));
+        List<String> catList = searchCateList(searchMap);
+        map.put("categoryList", catList);
+        if(catList.size() > 0){
+            map.putAll(searchSpecAndBrandList(catList.get(0)));
+        }
         return ResponseDataUtil.buildSuccess(map);
     }
 
@@ -103,5 +111,17 @@ public class ItemSearchServiceImpl implements ItemSearchService{
             catelist.add(entry.getGroupValue());//将分组结果的名称封装到返回值中
         }
         return catelist;
+    }
+
+    public Map searchSpecAndBrandList(String category){
+        Map<String, Object> map = new HashMap<>();
+        Integer tmpId = (Integer) redisTemplate.boundHashOps("itemCat").get(category);//获取到模板id         Redis存入long类型的id取出来变成了integer类型，这里强转为long会报错
+        if(tmpId != null){
+            List<Map> brandList = (List<Map>) redisTemplate.boundHashOps("brandList").get(tmpId);
+            List<Map> specList = (List<Map>) redisTemplate.boundHashOps("specList").get(tmpId);
+            map.put("brandList", brandList);
+            map.put("specList", specList);
+        }
+        return map;
     }
 }
