@@ -28,7 +28,6 @@ public class TbItem implements Serializable{
     @Field("item_image")
     private String image;
 
-    @Field("item_category")
     private Long categoryid;
 
     private String status;
@@ -52,6 +51,7 @@ public class TbItem implements Serializable{
 
     private String cartThumbnail;
 
+    @Field("item_category")
     private String category;
 
     @Field("item_brand")

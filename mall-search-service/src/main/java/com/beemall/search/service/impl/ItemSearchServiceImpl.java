@@ -7,12 +7,12 @@ import com.beemall.pojo.TbItem;
 import com.beemall.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
-import org.springframework.data.solr.core.query.result.HighlightEntry;
-import org.springframework.data.solr.core.query.result.HighlightPage;
-import org.springframework.data.solr.core.query.result.ScoredPage;
+import org.springframework.data.solr.core.query.result.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +35,12 @@ public class ItemSearchServiceImpl implements ItemSearchService{
     @Override
     public ResponseData search(Map searchMap) {
         Map<String, Object> map = new HashMap<>();
+        map.put("rows",searchItemList(searchMap));
+        map.put("categoryList", searchCateList(searchMap));
+        return ResponseDataUtil.buildSuccess(map);
+    }
+
+    public List<TbItem> searchItemList(Map searchMap){
         String keyword = (String) searchMap.get("keywords");
 //        Query query = new SimpleQuery();
 //        Criteria criteria = new Criteria("item_keywords").is(keyword);
@@ -68,7 +74,34 @@ public class ItemSearchServiceImpl implements ItemSearchService{
             }
 
         }
-        map.put("rows",page.getContent());
-        return ResponseDataUtil.buildSuccess(map);
+        return page.getContent();
+    }
+
+    public List<String> searchCateList(Map searchMap){
+        String keyword = (String) searchMap.get("keywords");
+        List<String> catelist = new ArrayList();
+        Query query=new SimpleQuery();
+        //按照关键字查询
+        Criteria criteria=new Criteria("item_keywords").is(keyword);
+        query.addCriteria(criteria);
+        //设置分组选项
+        GroupOptions options = new GroupOptions();
+        options.addGroupByField("item_category");//可以有多个选项
+        options.setOffset(0);//设置查询多少结果，不设置会报错
+        options.setLimit(-1);
+
+        query.setGroupOptions(options);
+        //设置分组选项
+        GroupPage<TbItem> page = solrTemplate.queryForGroupPage(solrCore, query, TbItem.class);
+        //设置分组选项
+        GroupResult<TbItem> result = page.getGroupResult("item_category");
+        //得到分组结果入口页
+        Page<GroupEntry<TbItem>> groupEntries = result.getGroupEntries();
+        //得到分组入口集合
+        List<GroupEntry<TbItem>> content = groupEntries.getContent();
+        for(GroupEntry<TbItem> entry:content){
+            catelist.add(entry.getGroupValue());//将分组结果的名称封装到返回值中
+        }
+        return catelist;
     }
 }
