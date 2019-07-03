@@ -42,9 +42,16 @@ public class ItemSearchServiceImpl implements ItemSearchService{
         map.put("rows",searchItemList(searchMap));
         List<String> catList = searchCateList(searchMap);
         map.put("categoryList", catList);
-        if(catList.size() > 0){
-            map.putAll(searchSpecAndBrandList(catList.get(0)));
+        //查询品牌和规格列表
+        String categoryName=(String)searchMap.get("category");
+        if(!"".equals(categoryName)){//如果有分类名称
+            map.putAll(searchSpecAndBrandList(categoryName));
+        }else{//如果没有分类名称，按照第一个查询
+            if(catList.size()>0){
+                map.putAll(searchSpecAndBrandList(catList.get(0)));
+            }
         }
+
         return ResponseDataUtil.buildSuccess(map);
     }
 
@@ -61,8 +68,38 @@ public class ItemSearchServiceImpl implements ItemSearchService{
         options.setSimplePrefix("<em style='color:red'>");//高亮前缀
         options.setSimplePostfix("</em>");
         query.setHighlightOptions(options);
+
+
+        //1.1关键字查询
         Criteria criteria = new Criteria("item_keywords").is(keyword);
         query.addCriteria(criteria);
+        //1.2按分类筛选
+        if(!"".equals(searchMap.get("category"))){
+            Criteria filterCriteria=new Criteria("item_category").is(searchMap.get("category"));
+            FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+        //1.3按品牌筛选
+        if(!"".equals(searchMap.get("brand"))){
+            Criteria filterCriteria=new Criteria("item_brand").is(searchMap.get("brand"));
+            FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+        //1.4过滤规格
+        //这种规则目前存在问题，原因是高版本的solr在使用‘动态域’时，会将含中文的key值的中文部分转化为 _ .
+        //解决方法个人想到的有两种：
+        //      ①降低solr版本；
+        //      ②数据库表字段修改，将中文部分转成英文或者用数字id代替中文的值 例：{"机身内存":"16G","网络":"移动4G"}  --> {id1: "16G",id2:"移动4G"}
+        if(searchMap.get("spec")!=null){
+            Map<String,String> specMap= (Map) searchMap.get("spec");
+            for(String key:specMap.keySet() ){
+                Criteria filterCriteria=new Criteria("item_spec_"+key).is( specMap.get(key) );
+                FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+        //高亮显示处理
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(solrCore, query, TbItem.class);
 
         //需要从返回高亮对象中获取高亮结果再返回，即在高亮入口集合中遍历
