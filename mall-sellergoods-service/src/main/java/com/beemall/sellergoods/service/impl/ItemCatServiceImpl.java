@@ -11,6 +11,7 @@ import com.beemall.pojo.TbItemCat;
 import com.beemall.pojo.TbItemCatExample;
 import com.beemall.pojo.TbItemCatExample.Criteria;
 import com.beemall.sellergoods.service.ItemCatService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -25,7 +26,10 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
-	
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+
 	/**
 	 * 查询全部
 	 */
@@ -122,6 +126,12 @@ public class ItemCatServiceImpl implements ItemCatService {
 		TbItemCatExample example=new TbItemCatExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andParentIdEqualTo(parentId);
+
+		//每次执行查询的时候，一次性读取缓存进行存储 (因为每次增删改都要执行此方法)
+		List<TbItemCat> list = findAll();
+		for(TbItemCat cat : list) {
+			redisTemplate.boundHashOps("itemCat").put(cat.getName(), cat.getTypeId());//将类型名称与模板id存入缓存中
+		}
 		return ResponseDataUtil.buildSuccess(itemCatMapper.selectByExample(example));
 	}
 

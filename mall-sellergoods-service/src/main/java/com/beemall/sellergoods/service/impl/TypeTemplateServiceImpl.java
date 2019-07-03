@@ -17,6 +17,7 @@ import com.beemall.pojo.TbTypeTemplate;
 import com.beemall.pojo.TbTypeTemplateExample;
 import com.beemall.pojo.TbTypeTemplateExample.Criteria;
 import com.beemall.sellergoods.service.TypeTemplateService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -34,6 +35,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
 	@Autowired
 	private TbSpecificationOptionMapper specificationOptionMapper;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 
 	/**
@@ -118,8 +122,23 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	
 		}
 		
-		PageInfo<TbTypeTemplate> pageInfo=   new PageInfo<>( typeTemplateMapper.selectByExample(example));	
+		PageInfo<TbTypeTemplate> pageInfo=   new PageInfo<>( typeTemplateMapper.selectByExample(example));
+		saveToRedis();//存规格和品牌数据到缓存
 		return ResponseDataUtil.buildSuccess(pageInfo);
+	}
+
+	private void saveToRedis() {
+		//获取模板数据
+		List<TbTypeTemplate> typeTemplateList = findAll();
+		//循环模板
+		for(TbTypeTemplate typeTemplate :typeTemplateList){
+			//存储品牌列表
+			List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(), Map.class);
+			redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(), brandList);
+			//存储规格列表
+			List<Map> specList = (List<Map>) findSpecList(typeTemplate.getId()).getData();//根据模板ID查询规格列表
+			redisTemplate.boundHashOps("specList").put(typeTemplate.getId(), specList);
+		}
 	}
 
 	@Override
