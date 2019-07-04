@@ -1,6 +1,6 @@
 app.controller('searchController',function($scope,searchService){
 
-    $scope.searchMap = {category: '', brand: '', spec: {}}
+    $scope.searchMap = {category: '', brand: '', spec: {},price: ''}
 
     //搜索
     $scope.search=function(){
@@ -13,7 +13,7 @@ app.controller('searchController',function($scope,searchService){
     }
 
     $scope.addSearchItem = function(key, value){
-        if(key == 'category' || key == 'brand'){
+        if(key == 'category' || key == 'brand' || key == 'price'){
             $scope.searchMap[key] = value;
         }else {
             $scope.searchMap.spec[key] = value;
@@ -22,7 +22,7 @@ app.controller('searchController',function($scope,searchService){
     }
 
     $scope.removeSearchItem = function (key) {
-        if(key == 'category' || key == 'brand'){
+        if(key == 'category' || key == 'brand' || key == 'price'){
             $scope.searchMap[key] = '';
         }else {
             delete $scope.searchMap.spec[key]

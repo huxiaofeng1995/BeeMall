@@ -1,6 +1,7 @@
 package com.beemall.search.service;
 
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,7 @@ import org.springframework.context.ApplicationContext;
  */
 @SpringBootApplication
 @EnableDubbo
+@MapperScan("com.beemall.mapper")
 public class SearchServiceApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(SearchServiceApplication.class, args);
