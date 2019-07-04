@@ -2,6 +2,7 @@ package com.beemall.sellergoods.service;
 import java.util.List;
 import com.beemall.pojo.TbGoods;
 import com.beemall.entity.ResponseData;
+import com.beemall.pojo.TbItem;
 import com.beemall.pojogroup.Goods;
 
 /**
@@ -72,4 +73,13 @@ public interface GoodsService {
 	 * @param status
 	 */
 	public ResponseData updateMarketStatus(Long id, String status);
+
+	/**
+	 * 根据商品ID和状态查询Item表信息
+	 * @param goodsIds
+	 * @param status
+	 * @return
+	 */
+	public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status );
+
 }

@@ -2,6 +2,7 @@ package com.beemall.search.service;
 
 import com.beemall.entity.ResponseData;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ItemSearchService {
@@ -11,5 +12,18 @@ public interface ItemSearchService {
      * @return
      */
     public ResponseData search(Map searchMap);
+
+    /**
+     * 导入数据
+     * @param list
+     */
+    public void importList(List list);
+
+
+    /**
+     * 删除数据
+     * @param goodsIdList
+     */
+    public void deleteByGoodsIds(List goodsIdList);
 
 }

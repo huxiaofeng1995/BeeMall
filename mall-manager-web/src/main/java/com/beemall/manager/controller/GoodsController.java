@@ -1,8 +1,11 @@
 package com.beemall.manager.controller;
+import java.util.Arrays;
 import java.util.List;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.pojo.TbItem;
 import com.beemall.pojogroup.Goods;
+import com.beemall.search.service.ItemSearchService;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.pojo.TbGoods;
@@ -67,6 +70,7 @@ public class GoodsController {
 	 */
 	@GetMapping("/delete")
 	public ResponseData delete(Long [] ids){
+		itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
 		return goodsService.delete(ids);
 	}
 	
@@ -82,6 +86,10 @@ public class GoodsController {
 		return goodsService.findPageByExample(goods, page, size);		
 	}
 
+	@Reference
+	private ItemSearchService itemSearchService;
+
+
 	/**
 	 * 更新状态
 	 * @param ids
@@ -89,6 +97,16 @@ public class GoodsController {
 	 */
 	@PostMapping("/updateStatus")
 	public ResponseData updateStatus(Long[] ids, String status){
+		if(status.equals("1")){//审核通过
+			List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
+			//调用搜索接口实现数据批量导入
+			if(itemList.size()>0){
+				itemSearchService.importList(itemList);
+			}else{
+				System.out.println("没有明细数据");
+			}
+		}
+
 		return 	goodsService.updateStatus(ids, status);
 	}
 
