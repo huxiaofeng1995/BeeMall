@@ -148,10 +148,7 @@
 			<!--bread-->
 			<div class="bread">
 				<ul class="fl sui-breadcrumb">
-					<li>
-						<a href="#">全部结果</a>
-					</li>					
-					<li class="active">智能手机</li>					
+					<li class="active">搜索条件： 搜索结果：{{resultMap.total}}条记录</li>
 				</ul>
 				<ul class="tags-choose">
 					<li class="tag" ng-if="searchMap.category != ''">商品分类：{{searchMap.category}}<i class="sui-icon icon-tb-close" ng-click="removeSearchItem('category')"></i></li>
@@ -257,20 +254,23 @@
 					<div class="navbar-inner filter">
 						<ul class="sui-nav">
 							<li class="active">
-								<a href="#">综合</a>
+								<a href="#" ng-click="sortByField('', '')">综合</a>
 							</li>
 							<li>
 								<a href="#">销量</a>
 							</li>
 							<li>
-								<a href="#">新品</a>
+								<a href="#" ng-click="sortByField('ASC', 'updatetime')">新品</a>
 							</li>
 							<li>
 								<a href="#">评价</a>
 							</li>
 							<li>
-								<a href="#">价格</a>
+								<a href="#" ng-click="sortByField('ASC', 'price')">价格↑</a>
 							</li>
+							<li>
+                                <a href="#" ng-click="sortByField('DESC', 'price')">价格↓</a>
+                            </li>
 						</ul>
 					</div>
 				</div>

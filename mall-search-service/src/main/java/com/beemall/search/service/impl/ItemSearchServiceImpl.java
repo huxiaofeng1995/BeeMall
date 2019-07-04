@@ -11,6 +11,7 @@ import com.beemall.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
@@ -45,6 +46,10 @@ public class ItemSearchServiceImpl implements ItemSearchService{
     @Override
     public ResponseData search(Map searchMap) {
         Map<String, Object> map = new HashMap<>();
+        //关键字空格处理 不去空格可能搜不出结果
+        String keywords = (String) searchMap.get("keywords");
+        searchMap.put("keywords", keywords.replace(" ", ""));
+
         map.putAll(searchItemList(searchMap));
         List<String> catList = searchCateList(searchMap);
         map.put("categoryList", catList);
@@ -138,7 +143,19 @@ public class ItemSearchServiceImpl implements ItemSearchService{
         query.setOffset(offset);//从第几条记录查询
         query.setRows(pageSize);
 
-
+        //1.7排序
+        String sort = (String) searchMap.get("sort");
+        String field = (String) searchMap.get("sortField");
+        if(sort != null && !"".equals(sort)){
+            if(sort.equals("ASC")){
+                Sort s = new Sort(Sort.Direction.ASC, "item_" + field);
+                query.addSort(s);
+            }
+            if(sort.equals("DESC")){
+                Sort s = new Sort(Sort.Direction.DESC, "item_" + field);
+                query.addSort(s);
+            }
+        }
 
         //高亮显示处理
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(solrCore, query, TbItem.class);

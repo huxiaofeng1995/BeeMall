@@ -1,6 +1,6 @@
 app.controller('searchController',function($scope,searchService){
 
-    $scope.searchMap = {category: '', brand: '', spec: {},price: '',pageNo: 1, pageSize: 40}
+    $scope.searchMap = {category: '', brand: '', spec: {},price: '',pageNo: 1, pageSize: 40, sort: '', sortField: ''}
 
     $scope.resultMap = {}
     //搜索
@@ -93,6 +93,12 @@ app.controller('searchController',function($scope,searchService){
         }else{
             return false;
         }
+    }
+
+    $scope.sortByField = function(sort,field){
+        $scope.searchMap.sort = sort;
+        $scope.searchMap.sortField = field;
+        $scope.search();
     }
 
 });
