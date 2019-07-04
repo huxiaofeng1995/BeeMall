@@ -45,7 +45,7 @@ public class ItemSearchServiceImpl implements ItemSearchService{
     @Override
     public ResponseData search(Map searchMap) {
         Map<String, Object> map = new HashMap<>();
-        map.put("rows",searchItemList(searchMap));
+        map.putAll(searchItemList(searchMap));
         List<String> catList = searchCateList(searchMap);
         map.put("categoryList", catList);
         //查询品牌和规格列表
@@ -61,7 +61,8 @@ public class ItemSearchServiceImpl implements ItemSearchService{
         return ResponseDataUtil.buildSuccess(map);
     }
 
-    public List<TbItem> searchItemList(Map searchMap){
+    public Map searchItemList(Map searchMap){
+        Map<String, Object> map = new HashMap<>();
         String keyword = (String) searchMap.get("keywords");
 //        Query query = new SimpleQuery();
 //        Criteria criteria = new Criteria("item_keywords").is(keyword);
@@ -124,6 +125,19 @@ public class ItemSearchServiceImpl implements ItemSearchService{
                 query.addFilterQuery(filterQuery);
             }
         }
+        //1.6 分页查询
+        Integer pageNo= (Integer) searchMap.get("pageNo");//提取页码
+        if(pageNo==null){
+            pageNo = 1;//默认第一页
+        }
+        Integer pageSize=(Integer) searchMap.get("pageSize");//每页记录数
+        if(pageSize==null){
+            pageSize=20;//默认20
+        }
+        Long offset = Long.valueOf((pageNo-1)*pageSize);
+        query.setOffset(offset);//从第几条记录查询
+        query.setRows(pageSize);
+
 
 
         //高亮显示处理
@@ -146,7 +160,11 @@ public class ItemSearchServiceImpl implements ItemSearchService{
             }
 
         }
-        return page.getContent();
+        map.put("rows", page.getContent());
+        map.put("totalPages", page.getTotalPages());//返回总页数
+        map.put("total", page.getTotalElements());//返回总记录数
+        map.put("curPage", pageNo);
+        return map;
     }
 
     public List<String> searchCateList(Map searchMap){
