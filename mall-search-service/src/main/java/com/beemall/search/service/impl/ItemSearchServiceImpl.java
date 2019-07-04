@@ -3,7 +3,10 @@ package com.beemall.search.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.beemall.entity.ResponseData;
 import com.beemall.entity.ResponseDataUtil;
+import com.beemall.mapper.TbSpecificationMapper;
 import com.beemall.pojo.TbItem;
+import com.beemall.pojo.TbSpecification;
+import com.beemall.pojo.TbSpecificationExample;
 import com.beemall.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +38,9 @@ public class ItemSearchServiceImpl implements ItemSearchService{
 
     @Value("${spring.data.solr.core}")
     private String solrCore;
+
+    @Autowired
+    private TbSpecificationMapper specificationMapper;
 
     @Override
     public ResponseData search(Map searchMap) {
@@ -89,12 +95,18 @@ public class ItemSearchServiceImpl implements ItemSearchService{
         //这种规则目前存在问题，原因是高版本的solr在使用‘动态域’时，会将含中文的key值的中文部分转化为 _ .
         //解决方法个人想到的有两种：
         //      ①降低solr版本；
-        //      ②数据库表字段修改，将中文部分转成英文或者用数字id代替中文的值 例：{"机身内存":"16G","网络":"移动4G"}  --> {id1: "16G",id2:"移动4G"}
+        //      ②solr表中的字段修改，将规格名称转成英文或者用规格id代替规格名称 例：{"机身内存":"16G","网络":"移动4G"}  --> {id1: "16G",id2:"移动4G"}
         if(searchMap.get("spec")!=null){
             Map<String,String> specMap= (Map) searchMap.get("spec");
             for(String key:specMap.keySet() ){
-                Criteria filterCriteria=new Criteria("item_spec_"+key).is( specMap.get(key) );
-                FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+                //采用第二种方式解决bug
+                TbSpecificationExample example1 = new TbSpecificationExample();
+                TbSpecificationExample.Criteria c = example1.createCriteria();
+                c.andSpecNameEqualTo(key);
+                TbSpecification spec = specificationMapper.selectByExample(example1).get(0);
+
+                Criteria filterCriteria = new Criteria("item_spec_"+ spec.getId()).is( specMap.get(key) );
+                FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
                 query.addFilterQuery(filterQuery);
             }
         }

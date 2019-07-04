@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationContext;
 public class SellerServiceApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(SellerServiceApplication.class, args);
-//        SolrUtil solrUtil = context.getBean(SolrUtil.class);
-//        solrUtil.importItemData();
+        SolrUtil solrUtil = context.getBean(SolrUtil.class);
+        solrUtil.importItemData();
     }
 }
