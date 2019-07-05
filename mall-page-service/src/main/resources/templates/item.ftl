@@ -23,6 +23,7 @@
                     "id":${sku.id?c},
                     "title":"${sku.title!''}",
                     "price":${sku.price?c},
+					"num":${sku.num?c},
                     "spec": ${sku.spec}
                 } <#if sku_has_next>,</#if>
 			</#list>
@@ -152,7 +153,7 @@
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
+										<a href="cart.html" ng-click="addToCart()" class="sui-btn  btn-danger addshopcar">加入购物车</a>
 									</li>
 								</ul>
 							</div>
