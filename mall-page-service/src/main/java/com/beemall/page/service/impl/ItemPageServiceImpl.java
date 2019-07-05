@@ -4,9 +4,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.beemall.mapper.TbGoodsDescMapper;
 import com.beemall.mapper.TbGoodsMapper;
 import com.beemall.mapper.TbItemCatMapper;
+import com.beemall.mapper.TbItemMapper;
 import com.beemall.page.service.ItemPageService;
 import com.beemall.pojo.TbGoods;
 import com.beemall.pojo.TbGoodsDesc;
+import com.beemall.pojo.TbItem;
+import com.beemall.pojo.TbItemExample;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +44,9 @@ public class ItemPageServiceImpl implements ItemPageService {
     @Autowired
     private TbItemCatMapper itemCatMapper;
 
+    @Autowired
+    private TbItemMapper itemMapper;
+
     @Override
     public boolean genItemHtml(Long goodsId){
         try {
@@ -59,6 +66,15 @@ public class ItemPageServiceImpl implements ItemPageService {
             dataModel.put("cate2", cate2);
             dataModel.put("cate3", cate3);
 
+            //读取sku列表
+            TbItemExample example = new TbItemExample();
+            TbItemExample.Criteria c = example.createCriteria();
+            c.andGoodsIdEqualTo(goodsId);
+            c.andStatusEqualTo("1");//状态有效
+            example.setOrderByClause("is_default desc");//按是否默认进行降序排序
+
+            List<TbItem> items = itemMapper.selectByExample(example);
+            dataModel.put("skuList", items);
 
             Writer out=new FileWriter(pagedir+goodsId+".html");
             template.process(dataModel, out);

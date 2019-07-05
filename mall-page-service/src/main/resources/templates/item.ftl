@@ -12,9 +12,27 @@
     <link rel="stylesheet" type="text/css" href="css/pages-item.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-zoom.css" />
     <link rel="stylesheet" type="text/css" href="css/widget-cartPanelView.css" />
+
+    <script type="text/javascript" src="plugins/angularjs/angular.min.js">  </script>
+    <script type="text/javascript" src="js/base.js">  </script>
+    <script type="text/javascript" src="js/controller/itemController.js">  </script>
+	<script>
+		var skuList=[
+		    <#list skuList as sku>
+                {
+                    "id":${sku.id?c},
+                    "title":"${sku.title!''}",
+                    "price":${sku.price?c},
+                    "spec": ${sku.spec}
+                } <#if sku_has_next>,</#if>
+			</#list>
+		]
+
+	</script>
+
 </head>
 
-<body>
+<body ng-app="beemall" ng-controller="itemController" ng-init="loadSku()">
 
 <#include "head.ftl">
 <#assign imgList = goodsDesc.itemImages?eval />
@@ -59,7 +77,7 @@
 				</div>
 				<div class="fr itemInfo-wrap">
 					<div class="sku-name">
-						<h4>${goods.goodsName}</h4>
+						<h4>{{sku.title}}</h4>
 					</div>
 					<div class="news"><span>${goods.caption}</span></div>
 					<div class="summary">
@@ -69,7 +87,7 @@
 							</div>
 							<div class="fl price">
 								<i>¥</i>
-								<em>${goods.price}</em>
+								<em>{{sku.price}}</em>
 								<span>降价通知</span>
 							</div>
 							<div class="fr remark">
@@ -115,7 +133,7 @@
 									</div>
 									</dt>
 									<#list spec.attributeValue as item>
-                                        <dd><a href="javascript:;" >${item}</a></dd>
+                                        <dd><a class="{{isSelected('${spec.attributeName}','${item}')?'selected':''}}"  href="javascript:;" ng-click="selectSpecification('${spec.attributeName}','${item}')">${item}<span title="点击取消选择">&nbsp;</span></a></dd>
 									</#list>
 								</dl>
 							</#list>
@@ -125,9 +143,9 @@
 							<div class="fl title">
 								<div class="control-group">
 									<div class="controls">
-										<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" />
-										<a href="javascript:void(0)" class="increment plus">+</a>
-										<a href="javascript:void(0)" class="increment mins">-</a>
+										<input autocomplete="off" type="text" ng-model="num" minnum="1" class="itxt" />
+										<a href="javascript:void(0)" ng-click="addNum(1)" class="increment plus">+</a>
+										<a href="javascript:void(0)" ng-click="addNum(-1)" class="increment mins">-</a>
 									</div>
 								</div>
 							</div>
