@@ -23,6 +23,9 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+
+	@Reference(timeout=40000)
+	private ItemPageService itemPageService;
 	
 	/**
 	 * 返回全部列表
@@ -99,6 +102,7 @@ public class GoodsController {
 	@PostMapping("/updateStatus")
 	public ResponseData updateStatus(Long[] ids, String status){
 		if(status.equals("1")){//审核通过
+			//1.更新solr索引库
 			List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
 			//调用搜索接口实现数据批量导入
 			if(itemList.size()>0){
@@ -106,21 +110,13 @@ public class GoodsController {
 			}else{
 				System.out.println("没有明细数据");
 			}
+			//2.生成静态商品详情页
+			for(Long id: ids){
+				itemPageService.genItemHtml(id);
+			}
 		}
 
 		return 	goodsService.updateStatus(ids, status);
-	}
-
-	@Reference(timeout=40000)
-	private ItemPageService itemPageService;
-	/**
-	 * 生成静态页（测试）
-	 * @param goodsId
-	 */
-	@GetMapping("/genHtml")
-	public String genHtml(Long goodsId){
-		itemPageService.genItemHtml(goodsId);
-		return "success";
 	}
 
 }
