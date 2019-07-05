@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.page.service.ItemPageService;
 import com.beemall.pojo.TbItem;
 import com.beemall.pojogroup.Goods;
 import com.beemall.search.service.ItemSearchService;
@@ -108,6 +109,18 @@ public class GoodsController {
 		}
 
 		return 	goodsService.updateStatus(ids, status);
+	}
+
+	@Reference(timeout=40000)
+	private ItemPageService itemPageService;
+	/**
+	 * 生成静态页（测试）
+	 * @param goodsId
+	 */
+	@GetMapping("/genHtml")
+	public String genHtml(Long goodsId){
+		itemPageService.genItemHtml(goodsId);
+		return "success";
 	}
 
 }
