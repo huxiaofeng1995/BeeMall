@@ -25,11 +25,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba.boot</groupId>
-            <artifactId>dubbo-spring-boot-starter</artifactId>
-            <version>0.2.0</version>
-        </dependency>
         <!-- Spring Boot相关依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

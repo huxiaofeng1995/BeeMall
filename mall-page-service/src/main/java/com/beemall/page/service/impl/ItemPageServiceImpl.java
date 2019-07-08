@@ -1,6 +1,5 @@
 package com.beemall.page.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.beemall.mapper.TbGoodsDescMapper;
 import com.beemall.mapper.TbGoodsMapper;
 import com.beemall.mapper.TbItemCatMapper;
@@ -14,6 +13,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;

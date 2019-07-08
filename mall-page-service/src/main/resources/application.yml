@@ -48,16 +48,3 @@ spring:
     topic: topic-page
   jms:
     pub-sub-domain: true #开启发布订阅模式 即topic模式
-
-#dubbo
-dubbo:
-  application:
-    name: mall-page-service
-  registry:
-    protocol: zookeeper
-    address: 192.168.25.110:2181
-#  scan:
-#   base-package: com.beemall.
-  protocol:
-    name: dubbo
-    port: 20883
