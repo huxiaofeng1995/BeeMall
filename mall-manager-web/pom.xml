@@ -46,6 +46,17 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
+        <!-- SpringBoot Activemq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+        </dependency>
+
+        <!--模块依赖-->
         <dependency>
             <groupId>com.beemall</groupId>
             <artifactId>mall-sellergoods-interface</artifactId>

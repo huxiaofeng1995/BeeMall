@@ -19,6 +19,22 @@ spring:
       enabled: true
       max-file-size: 5Mb
       max-request-size: 10Mb
+  activemq:
+    #账号密码
+    user: user
+    password: user
+    #URL of the ActiveMQ broker.
+    broker-url: tcp://192.168.25.110:61616
+    #必须使用连接池
+    pool:
+      #启用连接池
+      enabled: true
+      #连接池最大连接数
+      max-connections: 5
+      #空闲的连接过期时间，默认为30秒
+      idle-timeout: 30s
+    queue: queue-solr
+
 
 fdfs:
   so-timeout: 1501

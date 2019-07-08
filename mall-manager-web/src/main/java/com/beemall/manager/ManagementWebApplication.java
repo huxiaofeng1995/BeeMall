@@ -1,9 +1,9 @@
 package com.beemall.manager;
 
-//import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jms.annotation.EnableJms;
 
 /**
  * @author ：bee
@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @EnableDubbo
+@EnableJms
 public class ManagementWebApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManagementWebApplication.class, args);

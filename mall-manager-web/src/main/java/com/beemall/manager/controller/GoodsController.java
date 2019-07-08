@@ -2,15 +2,25 @@ package com.beemall.manager.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.beemall.entity.MQMessage;
 import com.beemall.entity.ResponseData;
 import com.beemall.page.service.ItemPageService;
 import com.beemall.pojo.TbItem;
 import com.beemall.pojogroup.Goods;
 import com.beemall.search.service.ItemSearchService;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.beemall.pojo.TbGoods;
 import com.beemall.sellergoods.service.GoodsService;
+
+import javax.jms.Destination;
+
 
 /**
  * controller
@@ -26,6 +36,12 @@ public class GoodsController {
 
 	@Reference(timeout=40000)
 	private ItemPageService itemPageService;
+
+	@Value("${spring.activemq.queue}")
+	private String queue;
+
+	@Autowired
+	private JmsMessagingTemplate jmsTemplate;
 	
 	/**
 	 * 返回全部列表
@@ -74,7 +90,11 @@ public class GoodsController {
 	 */
 	@GetMapping("/delete")
 	public ResponseData delete(Long [] ids){
-		itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
+		MQMessage mqMessage = new MQMessage();//自定义消息格式
+		mqMessage.setMethod("deleteItems");//消费者端可根据这个字段类型来进行不同的操作
+		mqMessage.setData(ids);
+		Destination destination = new ActiveMQQueue(queue);
+		jmsTemplate.convertAndSend(destination, JSON.toJSONString(mqMessage));
 		return goodsService.delete(ids);
 	}
 	
@@ -90,9 +110,6 @@ public class GoodsController {
 		return goodsService.findPageByExample(goods, page, size);		
 	}
 
-	@Reference
-	private ItemSearchService itemSearchService;
-
 
 	/**
 	 * 更新状态
@@ -105,15 +122,19 @@ public class GoodsController {
 			//1.更新solr索引库
 			List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
 			//调用搜索接口实现数据批量导入
+			MQMessage mqMessage = new MQMessage();//自定义消息格式
+			mqMessage.setMethod("importItems");//消费者端可根据这个字段类型来进行不同的操作
+			mqMessage.setData(itemList);
 			if(itemList.size()>0){
-				itemSearchService.importList(itemList);
+				Destination destination = new ActiveMQQueue(queue);
+				jmsTemplate.convertAndSend(destination, JSON.toJSONString(mqMessage));
 			}else{
 				System.out.println("没有明细数据");
 			}
 			//2.生成静态商品详情页
-			for(Long id: ids){
-				itemPageService.genItemHtml(id);
-			}
+//			for(Long id: ids){
+//				itemPageService.genItemHtml(id);
+//			}
 		}
 
 		return 	goodsService.updateStatus(ids, status);

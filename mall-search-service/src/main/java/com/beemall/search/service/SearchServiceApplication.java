@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jms.annotation.EnableJms;
 
 /**
  * @author ：bee
@@ -14,6 +15,7 @@ import org.springframework.context.ApplicationContext;
  */
 @SpringBootApplication
 @EnableDubbo
+@EnableJms
 @MapperScan("com.beemall.mapper")
 public class SearchServiceApplication {
     public static void main(String[] args) {
