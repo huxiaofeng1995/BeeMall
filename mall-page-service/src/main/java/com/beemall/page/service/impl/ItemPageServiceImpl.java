@@ -15,6 +15,7 @@ import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 @Service
 public class ItemPageServiceImpl implements ItemPageService {
-    @Value("${pagedir}")
+    @Value("${spring.freemarker.pagedir}")
     private String pagedir;
 
     @Autowired
@@ -79,6 +80,19 @@ public class ItemPageServiceImpl implements ItemPageService {
             Writer out=new FileWriter(pagedir+goodsId+".html");
             template.process(dataModel, out);
             out.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteHtml(Long[] goodsIds) {
+        try {
+            for(Long goodsId:goodsIds){
+                new File(pagedir+goodsId+".html").delete();
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();

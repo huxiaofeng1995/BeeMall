@@ -45,7 +45,7 @@ public class MQConsumer {
 
     private static final String DELETE_ITEMS = "deleteItems";
 
-    @JmsListener(destination = "${spring.activemq.queue}")
+    @JmsListener(destination = "${spring.activemq.queue-solr}")
     public void handle(String msg){
         System.out.println("收到队列消息：" + msg);
         String method = JSON.parseObject(msg).getString("method");

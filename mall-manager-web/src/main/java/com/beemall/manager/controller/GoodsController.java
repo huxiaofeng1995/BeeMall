@@ -1,16 +1,13 @@
 package com.beemall.manager.controller;
-import java.util.Arrays;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.beemall.entity.MQMessage;
 import com.beemall.entity.ResponseData;
-import com.beemall.page.service.ItemPageService;
 import com.beemall.pojo.TbItem;
 import com.beemall.pojogroup.Goods;
-import com.beemall.search.service.ItemSearchService;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsMessagingTemplate;
@@ -34,11 +31,11 @@ public class GoodsController {
 	@Reference
 	private GoodsService goodsService;
 
-	@Reference(timeout=40000)
-	private ItemPageService itemPageService;
-
-	@Value("${spring.activemq.queue}")
+	@Value("${spring.activemq.queue-solr}")
 	private String queue;
+
+	@Value("${spring.activemq.topic-page}")
+	private String topic;
 
 	@Autowired
 	private JmsMessagingTemplate jmsTemplate;
@@ -93,8 +90,13 @@ public class GoodsController {
 		MQMessage mqMessage = new MQMessage();//自定义消息格式
 		mqMessage.setMethod("deleteItems");//消费者端可根据这个字段类型来进行不同的操作
 		mqMessage.setData(ids);
-		Destination destination = new ActiveMQQueue(queue);
-		jmsTemplate.convertAndSend(destination, JSON.toJSONString(mqMessage));
+		//更新solr索引
+		Destination destination1 = new ActiveMQQueue(queue);
+		jmsTemplate.convertAndSend(destination1, JSON.toJSONString(mqMessage));
+		//删除静态页
+		mqMessage.setMethod("deletePages");
+		Destination destination2 = new ActiveMQTopic(topic);
+		jmsTemplate.convertAndSend(destination2, JSON.toJSONString(mqMessage));
 		return goodsService.delete(ids);
 	}
 	
@@ -132,9 +134,10 @@ public class GoodsController {
 				System.out.println("没有明细数据");
 			}
 			//2.生成静态商品详情页
-//			for(Long id: ids){
-//				itemPageService.genItemHtml(id);
-//			}
+			mqMessage.setMethod("generatePages");
+			mqMessage.setData(ids);
+			Destination destination = new ActiveMQTopic(topic);
+			jmsTemplate.convertAndSend(destination, JSON.toJSONString(mqMessage));
 		}
 
 		return 	goodsService.updateStatus(ids, status);

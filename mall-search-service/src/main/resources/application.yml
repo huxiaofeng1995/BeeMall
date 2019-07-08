@@ -62,4 +62,4 @@ spring:
       max-connections: 5
       #空闲的连接过期时间，默认为30秒
       idle-timeout: 30s
-    queue: queue-solr
+    queue-solr: queue-solr

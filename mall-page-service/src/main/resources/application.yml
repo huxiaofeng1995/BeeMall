@@ -29,6 +29,25 @@ spring:
     # 设置ftl文件路径
     template-loader-path:
       - classpath:/templates
+    pagedir: d:\\beemall\\page\\
+#配置activemq
+  activemq:
+    #账号密码
+    user: user
+    password: user
+    #URL of the ActiveMQ broker.
+    broker-url: tcp://192.168.25.110:61616
+    #必须使用连接池
+    pool:
+      #启用连接池
+      enabled: true
+      #连接池最大连接数
+      max-connections: 5
+      #空闲的连接过期时间，默认为30秒
+      idle-timeout: 30s
+    topic: topic-page
+  jms:
+    pub-sub-domain: true #开启发布订阅模式 即topic模式
 
 #dubbo
 dubbo:
@@ -42,5 +61,3 @@ dubbo:
   protocol:
     name: dubbo
     port: 20883
-
-pagedir: d:\\beemall\\page\\
