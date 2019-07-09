@@ -1,9 +1,13 @@
 package com.beemall.sms.service.mq;
 
 import com.beemall.entity.MQMessage;
+import com.beemall.sms.service.util.SmsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 
 /**
@@ -15,26 +19,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class MQConsumer {
 
-
-    @Value("${spring.data.solr.core}")
-    private String solrCore;
-
     private static final String REGISTRER_MSG = "sendRegisterMsg";
 
     private static final String REGISTRER_SUCCESS = "registerSuccess";
 
+    @Autowired
+    private SmsUtil smsUtil;
+
     @JmsListener(destination = "${spring.activemq.queue}")
-    public void handle(MQMessage msg){
+    public void handle(Map msg){
         System.out.println("收到队列消息：" + msg);
-        if(msg.getMethod().equals(REGISTRER_MSG)) {
+        if(msg.get("method").equals(REGISTRER_MSG)) {
             sendRegisterMsg(msg);
-        }else if(msg.getMethod().equals(REGISTRER_SUCCESS)){
+        }else if(msg.get("method").equals(REGISTRER_SUCCESS)){
             //registerSuccess(msg);
         }
     }
 
-    private void sendRegisterMsg(MQMessage msg) {
-
+    private void sendRegisterMsg(Map msg) {
+        String signName = (String) msg.get("signName");
+        String tmplatecode = (String) msg.get("regTemplateCode");
+        String mobile = (String) msg.get("mobile");
+        String param = (String) msg.get("param");
+        smsUtil.sendRegisterMsg(mobile, tmplatecode, signName, param);
     }
 
 

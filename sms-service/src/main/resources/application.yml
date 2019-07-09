@@ -20,8 +20,8 @@ spring:
     queue: queue-sms
 
 aliSms:
-  accessKeyId: LTAIiZ0WdTZ5PV6T
-  accessSecret: VmLMcuvmtariuG46pYNTR1Q9vDOfAU
+  accessKeyId:
+  accessSecret:
   regionId: cn-hangzhou
   signName: FY小店
   regTemplateCode: SMS_169899589

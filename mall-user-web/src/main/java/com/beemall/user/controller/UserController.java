@@ -2,8 +2,10 @@ package com.beemall.user.controller;
 import java.util.List;
 
 import com.beemall.entity.ResponseData;
+import com.beemall.entity.ResponseDataUtil;
 import com.beemall.pojo.TbUser;
 import com.beemall.user.service.UserService;
+import com.beemall.user.util.PhoneFormatCheckUtils;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 
@@ -44,7 +46,13 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/add")
-	public ResponseData add(@RequestBody TbUser user){
+	public ResponseData add(@RequestBody TbUser user , String smscode){
+
+		boolean checkSmsCode = userService.checkSmsCode(user.getPhone(), smscode);
+		if(checkSmsCode==false){
+			return ResponseDataUtil.buildError( "验证码输入错误！");
+		}
+
 
 		return userService.add(user);
 		
@@ -91,5 +99,25 @@ public class UserController {
 	public ResponseData search(@RequestBody TbUser user, int page, int size  ){
 		return userService.findPageByExample(user, page, size);		
 	}
-	
+
+	/**
+	 * 发送短信验证码
+	 * @param phone
+	 * @return
+	 */
+	@PostMapping("/sendCode")
+	public ResponseData sendCode(@RequestBody String phone){
+		//判断手机号格式
+		if(!PhoneFormatCheckUtils.isPhoneLegal(phone)){
+			return ResponseDataUtil.buildError("手机号格式不正确");
+		}
+		try {
+			userService.createSmsCode(phone);//生成验证码
+			return ResponseDataUtil.buildSuccess( "验证码发送成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseDataUtil.buildError("验证码发送失败");
+		}
+	}
+
 }

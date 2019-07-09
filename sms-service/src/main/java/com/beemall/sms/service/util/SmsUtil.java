@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsUtil {
 
-    @Value("$aliSms.regionId")
+    @Value("${aliSms.regionId}")
     private String regionId;
 
-    @Value("$aliSms.accessKeyId")
+    @Value("${aliSms.accessKeyId}")
     private String accessKeyId;
 
-    @Value("$aliSms.accessSecret")
+    @Value("${aliSms.accessSecret}")
     private String accessSecret;
 
 
