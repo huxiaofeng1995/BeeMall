@@ -1,0 +1,12 @@
+server:
+  port: 9010
+
+#dubbo
+dubbo:
+  application:
+    name: mall-user-web
+  registry:
+    protocol: zookeeper
+    address: 192.168.25.110:2181
+  protocol:
+    name: dubbo

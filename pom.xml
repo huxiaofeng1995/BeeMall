@@ -184,6 +184,9 @@
         <module>mall-page-interface</module>
         <module>mall-page-service</module>
         <module>sms-service</module>
-    </modules>
+        <module>mall-user-interface</module>
+		<module>mall-user-service</module>
+		<module>mall-user-web</module>
+	</modules>
 
 </project>
