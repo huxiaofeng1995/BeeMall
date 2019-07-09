@@ -183,6 +183,7 @@
 		<module>mall-search-web</module>
         <module>mall-page-interface</module>
         <module>mall-page-service</module>
+        <module>sms-service</module>
     </modules>
 
 </project>
