@@ -10,6 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mall-cart-interface</artifactId>
-
+    <dependencies>
+        <dependency>
+            <artifactId>mall-pojo</artifactId>
+            <groupId>com.beemall</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

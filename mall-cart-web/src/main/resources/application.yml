@@ -15,7 +15,7 @@ cas:
     host:
       url: http://localhost:8888/cas
       login_url: ${cas.server.host.url}/login
-      logout_url: ${cas.server.host.url}/logout?service=https://www.baidu.com
+      logout_url: ${cas.server.host.url}/logout?service=https://localhost:9013/
 
 app:
   server:
