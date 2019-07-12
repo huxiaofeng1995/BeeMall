@@ -4,7 +4,8 @@ app.controller('cartController' ,function($scope, cartService){
         cartService.findCartList().success(
             function(response){
                 if(response.code == "0000"){
-                    $scope.cartList=response.data;
+                    $scope.cartList = response.data.list;
+                    $scope.loginName = response.data.username;
                     $scope.totalValue=cartService.sum($scope.cartList);//求合计数
                 }else {
                     alert(response.message)
@@ -25,5 +26,4 @@ app.controller('cartController' ,function($scope, cartService){
             }
         )
     }
-
 });

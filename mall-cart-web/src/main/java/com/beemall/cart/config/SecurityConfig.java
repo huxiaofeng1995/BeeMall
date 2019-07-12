@@ -56,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // 所有用户均可访问的资源
-                .antMatchers( "/cart.html","/css/**","/font/**","/img/**","/js/**","/plugins/**").permitAll()//permitAll()表示这个不需要验证
-                .antMatchers("/cart/*").anonymous()//允许匿名访问
+                .antMatchers( "/cart.html","/css/**","/font/**","/img/**","/js/**","/plugins/**","/cart/*").permitAll()//permitAll()表示这个不需要验证
+                .antMatchers("/cart/*").hasAnyRole("ANONYMOUS","USER")//允许匿名访问和登录访问
                 // 任何尚未匹配的URL只需要验证用户角色即可访问
                 .anyRequest().hasRole("USER")//在后台校验是会自动加上 "ROLE_"前缀
                 .and()
