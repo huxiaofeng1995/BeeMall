@@ -158,6 +158,9 @@
         <module>mall-user-interface</module>
 		<module>mall-user-service</module>
 		<module>mall-user-web</module>
+        <module>mall-cart-interface</module>
+		<module>mall-cart-service</module>
+		<module>mall-cart-web</module>
 	</modules>
 
 </project>

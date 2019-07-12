@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // 所有用户均可访问的资源
-                .antMatchers( "/register.html","/css/**","/img/**","/js/**","/plugins/**","/user/add","/user/sendCode").permitAll()//permitAll()表示这个不需要验证
+                .antMatchers( "/register.html","/css/**","/font/**","/img/**","/js/**","/plugins/**","/user/add","/user/sendCode").permitAll()//permitAll()表示这个不需要验证
                 // 任何尚未匹配的URL只需要验证用户角色即可访问
                 .anyRequest().hasRole("USER")//在后台校验是会自动加上 "ROLE_"前缀
                 .and()

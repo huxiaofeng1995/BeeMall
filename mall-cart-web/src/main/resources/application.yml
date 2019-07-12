@@ -1,0 +1,27 @@
+server:
+  port: 9013
+
+#dubbo
+dubbo:
+  application:
+    name: mall-cart-web
+  registry:
+    protocol: zookeeper
+    address: 192.168.25.110:2181
+  protocol:
+    name: dubbo
+cas:
+  server:
+    host:
+      url: http://localhost:8888/cas
+      login_url: ${cas.server.host.url}/login
+      logout_url: ${cas.server.host.url}/logout?service=https://www.baidu.com
+
+app:
+  server:
+    host:
+      url: http://localhost:9013
+  login:
+    url: /login
+  logout:
+    url: /logout
