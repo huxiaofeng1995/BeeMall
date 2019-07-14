@@ -46,15 +46,21 @@ public class CartController {
         System.out.println("当前登录用户：" + username);
         Map<String, Object> map = new HashMap<>();
         map.put("username" , username);
+        String cartListString = CookieUtil.getCookieValue(request, "cartList", "UTF-8");
+        if (cartListString == null || cartListString.equals("")) {
+            cartListString = "[]";
+        }
+        List<Cart> cartList_cookie = JSON.parseArray(cartListString, Cart.class);
         if(username.equals("anonymousUser")) {//用户未登陆,从cookie中读取
-            String cartListString = CookieUtil.getCookieValue(request, "cartList", "UTF-8");
-            if (cartListString == null || cartListString.equals("")) {
-                cartListString = "[]";
-            }
-            List<Cart> cartList_cookie = JSON.parseArray(cartListString, Cart.class);
             map.put("list", cartList_cookie);
         }else {//用户已登录，从redis中读取
-            map.put("list", cartService.findCartListFromRedis(username));
+            List<Cart> cartList_redis = cartService.findCartListFromRedis(username);
+            if(cartList_cookie.size() > 0) {
+                map.put("list", cartService.mergeCartList(cartList_cookie, cartList_redis));//合并购物车
+            }else {
+                map.put("list", cartList_redis);
+            }
+            CookieUtil.deleteCookie(request, response, "cartList");//清空cookie
         }
         return ResponseDataUtil.buildSuccess(map);
     }

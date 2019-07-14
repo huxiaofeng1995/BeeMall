@@ -136,6 +136,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<Cart> mergeCartList(List<Cart> cartList1, List<Cart> cartList2) {
+        for(Cart cart : cartList1){
+            List<TbOrderItem> orderItemList = cart.getOrderItemList();
+            for(TbOrderItem item : orderItemList){
+                addGoodsToCartList(cartList2, item.getItemId(), item.getNum());
+            }
+        }
         return null;
     }
 }
