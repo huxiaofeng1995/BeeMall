@@ -1,5 +1,5 @@
 
-app.controller("itemController",function($scope){
+app.controller("itemController",function($scope, $http){
     $scope.num = 1;
 	
 	//数量操作
@@ -61,7 +61,16 @@ app.controller("itemController",function($scope){
 
 	//添加商品到购物车
 	$scope.addToCart=function(){
-		console.log('skuid:'+$scope.sku.id);				
-	}
+        $http.get('http://localhost:9013/cart/addGoodsToCartList?itemId='
+            + $scope.sku.id +'&num='+$scope.num).success(
+            function(response){
+                if(response.success){
+                    location.href='http://localhost:9013/cart.html';//跳转到购物车页面
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
+    }
 
 });
