@@ -62,9 +62,9 @@ app.controller("itemController",function($scope, $http){
 	//添加商品到购物车
 	$scope.addToCart=function(){
         $http.get('http://localhost:9013/cart/addGoodsToCartList?itemId='
-            + $scope.sku.id +'&num='+$scope.num).success(
+            + $scope.sku.id +'&num='+$scope.num,{'withCredentials':true}).success(//必须在AJAX请求中打开withCredentials属性。否则，即使服务器同意发送Cookie，浏览器也不会发送
             function(response){
-                if(response.success){
+                if(response.code == "0000"){
                     location.href='http://localhost:9013/cart.html';//跳转到购物车页面
                 }else{
                     alert(response.message);
