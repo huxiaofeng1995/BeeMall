@@ -30,4 +30,10 @@ app.service('cartService',function($http){
     this.addAddress = function (addr) {
         return $http.post('address/add', addr );
     }
+
+    //保存订单
+    this.submitOrder=function(order){
+        return $http.post('order/add',order);
+    }
+
 });

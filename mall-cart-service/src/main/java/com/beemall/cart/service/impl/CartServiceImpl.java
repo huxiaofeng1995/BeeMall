@@ -142,6 +142,6 @@ public class CartServiceImpl implements CartService {
                 addGoodsToCartList(cartList2, item.getItemId(), item.getNum());
             }
         }
-        return null;
+        return cartList2;
     }
 }
